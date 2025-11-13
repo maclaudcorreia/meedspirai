@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MEEDS Piraí</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+</head>
+
+<body class="bg-blue-50 font-sans">
+
+  <div id="loading-overlay" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50 hidden">
+      <div class="bg-white p-6 rounded-lg shadow-2xl flex items-center">
+          <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-indigo-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <span class="text-indigo-700 font-semibold">Processando...</span>
+      </div>
+  </div>
+
+  <div class="container mx-auto p-4 sm:p-6 lg:p-8">
+
+    <div class="bg-white shadow-lg rounded-lg p-6 mb-8 border border-gray-100">
+        <div class="flex flex-col items-center justify-center text-center">
+            <img src="logo%20pirai.png" alt="Logo Piraí" class="h-16 mb-4" />
+            <h1 class="text-4xl font-extrabold text-indigo-800 mb-1">MEEDS Piraí - Controle Operacional</h1>
+            <p class="text-gray-500 text-lg font-light">Monitoramento dos Processos Operacionais por Unidade.</p>
+        </div>
+    </div>
+
+    <div class="flex justify-between items-center mb-4 p-4 bg-white rounded-lg shadow-md border border-gray-100">
+      <div class="flex gap-4">
+        <button id="addRow" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg flex items-center">
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+          Nova Linha
+        </button>
+        <button id="clr" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg flex items-center">
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+          Limpar Tudo
+        </button>
+      </div>
+      <button class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded-lg">
+        Exportar Dados
+      </button>
+    </div>
+
+    <div class="bg-white shadow-lg rounded-lg p-6 mb-8 border border-gray-100">
+      <h2 class="text-xl font-semibold text-gray-700 mb-3">Filtros Rápidos:</h2>
+      <div class="flex flex-wrap gap-4 items-end" id="filter-controls"></div>
+    </div>
+
+    <div class="flex border-b border-blue-200 mb-4 bg-white rounded-t-lg shadow-md">
+        <button id="tab-tabela" onclick="switchTab('tabela')" class="px-6 py-3 text-sm font-medium border-b-2 border-indigo-500 text-indigo-700 transition-colors duration-200 focus:outline-none">
+            Tabela de Processos
+        </button>
+        <button id="tab-dashboard" onclick="switchTab('dashboard')" class="px-6 py-3 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-indigo-700 transition-colors duration-200 focus:outline-none">
+            Dashboard de Status
+        </button>
+        <button id="tab-calendario" onclick="switchTab('calendario')" class="px-6 py-3 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-indigo-700 transition-colors duração-200 focus:outline-none">
+            Calendário
+        </button>
+    </div>
+
+    <div id="content-tabela" class="tab-content">
+      <div class="bg-white shadow-lg rounded-b-lg border border-gray-100 overflow-x-auto">
+        <table class="min-w-[1500px] divide-y divide-gray-200">
+          <thead class="bg-gray-100" id="table-head"></thead>
+          <tbody class="bg-white divide-y divide-gray-200" id="table-body">
+            <tr>
+              <td colspan="12" class="p-4 text-center text-gray-500">
+                Carregando dados da planilha...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="content-dashboard" class="tab-content hidden p-8 bg-white shadow-lg rounded-lg border border-gray-100 mb-8">
+        <h2 class="text-3xl font-bold text-gray-700 mb-2 text-center">Visão Geral dos Processos</h2>
+        <h3 class="text-xl font-medium text-gray-600 mb-6 text-center">Total de Processos: <span id="dashboard-total" class="font-bold text-indigo-600">0</span></h3>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+            <div class="bg-white p-6 rounded-lg shadow-md border border-gray-100 flex flex-col items-center h-full">
+                <h4 class="text-lg font-semibold text-gray-700 mb-3 text-center">Progresso Treinamento</h4>
+                <div class="relative w-40 h-40">
+                    <canvas id="chart-treinamento"></canvas>
+                    <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+                        <span class="text-2xl font-bold text-gray-800" id="treinamento-total-percent"></span>
+                        <span class="text-xs text-gray-500">Total</span>
+                    </div>
+                </div>
+                <div id="legend-treinamento" class="mt-4 text-sm w-full"></div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-md border border-gray-100 flex flex-col items-center h-full">
+                <h4 class="text-lg font-semibold text-gray-700 mb-3 text-center">Progresso Acompanhamento</h4>
+                <div class="relative w-40 h-40">
+                    <canvas id="chart-acompanhamento"></canvas>
+                    <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+                        <span class="text-2xl font-bold text-gray-800" id="acompanhamento-total-percent"></span>
+                        <span class="text-xs text-gray-500">Total</span>
+                    </div>
+                </div>
+                <div id="legend-acompanhamento" class="mt-4 text-sm w-full"></div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-md border border-gray-100 flex flex-col items-center h-full">
+                <h4 class="text-lg font-semibold text-gray-700 mb-3 text-center">Status Finalizado</h4>
+                <div class="relative w-40 h-40">
+                    <canvas id="chart-finalizada"></canvas>
+                    <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+                        <span class="text-2xl font-bold text-gray-800" id="finalizada-total-percent"></span>
+                        <span class="text-xs text-gray-500">Total</span>
+                    </div>
+                </div>
+                <div id="legend-finalizada" class="mt-4 text-sm w-full"></div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-md border border-gray-100 flex flex-col items-center h-full">
+                <h4 class="text-lg font-semibold text-gray-700 mb-3 text-center">Progresso Plotagem</h4>
+                <div class="relative w-40 h-40">
+                    <canvas id="chart-plotagem"></canvas>
+                    <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+                        <span class="text-2xl font-bold text-gray-800" id="plotagem-total-percent"></span>
+                        <span class="text-xs text-gray-500">Total</span>
+                    </div>
+                </div>
+                <div id="legend-plotagem" class="mt-4 text-sm w-full"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="content-calendario" class="tab-content hidden p-8 bg-white shadow-lg rounded-lg border border-gray-100 mb-8">
+        <h2 class="text-3xl font-bold text-gray-700 mb-4 text-center">Calendário de Entregas</h2>
+
+        <div class="flex justify-between items-center mb-6 max-w-lg mx-auto">
+            <button id="prev-month" class="p-2 text-indigo-600 hover:text-indigo-800 font-bold text-2xl">
+                &lt;
+            </button>
+            <h3 id="current-month-year" class="text-2xl font-semibold text-gray-700">Novembro de 2025</h3>
+            <button id="next-month" class="p-2 text-indigo-600 hover:text-indigo-800 font-bold text-2xl">
+                &gt;
+            </button>
+        </div>
+
+        <div id="calendar-container" class="border border-gray-300 rounded-lg overflow-hidden">
+            <div class="grid grid-cols-7 text-center bg-blue-600 text-white font-bold text-lg">
+                <div class="p-3">Dom</div>
+                <div class="p-3">Seg</div>
+                <div class="p-3">Ter</div>
+                <div class="p-3">Qua</div>
+                <div class="p-3">Qui</div>
+                <div class="p-3">Sex</div>
+                <div class="p-3">Sáb</div>
+            </div>
+
+            <div id="calendar-grid" class="grid grid-cols-7 min-h-[600px] divide-x divide-gray-300 border-t border-gray-300"></div>
+        </div>
+
+        <div class="mt-8">
+            <h4 class="text-lg font-semibold text-gray-700 mb-3">Legenda por Unidade:</h4>
+            <div id="calendar-legend" class="flex flex-wrap gap-x-6 gap-y-2 text-sm"></div>
+        </div>
+    </div>
+
+  </div>
+
+  <script>
+    // ########################################################################
+    // ⚠️ Cole aqui a URL da implantação do seu Apps Script (Web App /exec)
+    // ########################################################################
+    const API_URL = "https://script.google.com/macros/s/AKfycbynjRpa4xagZqDorHpBJ-2o2d_1K0uHlt-pAZXRzhfbR4xUe5xXp3z7hCRLxaVzWrSqPg/exec";
+
+    // Senha de segurança para ações destrutivas
+    const SENHA_DE_SEGURANCA = "1#@";
+
+    let linhasOriginais = [];
+    let filtrosAtivos = {
+        treinamento: 'Todos',
+        responsaveis: 'Todos',
+        finalizada: 'Todos',
+        acoes: 'Todos' // <— unificado
+    };
+    let charts = {};
+
+    const columns = [
+      { key: 'unidade', label: 'Unidade', type: 'select', options: ['SEMAIA', 'Centro', 'Hesio Cordeiro' ,'Arrozal', 'Cacaria'] },
+      { key: 'tipo_de_unidade', label: 'Tipo de Unidade', type: 'select', options: ['UBS', 'UPA', 'Hospital', 'Pronto Socorro'] },
+      { key: 'tipo_de_ambiente',label: 'Tipo de Ambiente', type: 'select', options: ['Totem','Cabine','Cabine Acessibilidade'] },
+      { key: 'data_inicio', label: 'Data Início', type: 'date' },
+      { key: 'data_fim', label: 'Data Fim', type: 'date' },
+      { key: 'tempo', label: 'Tempo', type: 'number' },
+      { key: 'treinamento', label: 'Treinamento', type: 'select', options: ['OK','Em Andamento','Pendente'] },
+      { key: 'responsaveis', label: 'Responsáveis', type: 'select', options: ['Maclaud','Marcelo','Alan', 'Calimed'] },
+      { key: 'acompanhamento', label: 'Acompanhamento', type: 'select', options: ['Realizado','Não Realizado'] },
+      { key: 'finalizada', label: 'FINALIZADA', type: 'select', options: ['Sim', 'Não'] },
+      { key: 'acoes', label: 'Plotagem', type: 'select', options: ['Realizado', 'Aguardando', 'Pendente'] }
+    ];
+
+    const tableBody = document.getElementById('table-body');
+    const tableHead = document.getElementById('table-head');
+    const filterControls = document.getElementById('filter-controls');
+
+    // ===================== LOADING & ABAS =====================
+    function showLoading() {
+      document.getElementById('loading-overlay').classList.remove('hidden');
+    }
+    function hideLoading() {
+      document.getElementById('loading-overlay').classList.add('hidden');
+    }
+
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-content').forEach(content => content.classList.add('hidden'));
+      document.querySelectorAll('[id^="tab-"]').forEach(button => {
+          button.classList.remove('border-indigo-500', 'text-indigo-700');
+          button.classList.add('border-transparent', 'text-gray-500', 'hover:text-indigo-700');
+      });
+
+      const selectedContent = document.getElementById(`content-${tabName}`);
+      const selectedButton = document.getElementById(`tab-${tabName}`);
+      if (selectedContent) selectedContent.classList.remove('hidden');
+      if (selectedButton) {
+          selectedButton.classList.remove('border-transparent', 'text-gray-500', 'hover:text-indigo-700');
+          selectedButton.classList.add('border-indigo-500', 'text-indigo-700');
+      }
+
+      if (tabName === 'dashboard') {
+          renderizarDashboard();
+      }
+    }
+
+    // ===================== UTILS DATA =====================
+    function formatarData(dataString) {
+      if (!dataString) return '';
+      try {
+          const datePart = dataString.split('T')[0];
+          const [ano, mes, dia] = datePart.split('-');
+          return `${dia}/${mes}/${ano}`;
+      } catch (e) {
+          return dataString;
+      }
+    }
+
+    function calcularDiferencaDias(dataInicio, dataFim) {
+      if (!dataInicio || !dataFim) return '';
+      try {
+          const start = new Date(dataInicio.split('T')[0]);
+          const end = new Date(dataFim.split('T')[0]);
+          const diffTime = Math.abs(end - start);
+          return Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+      } catch (e) {
+          console.error("Erro no cálculo de dias:", e);
+          return '';
+      }
+    }
+
+    // ===================== INPUT RENDER =====================
+    function generateInputHTML(key, value, type, options, currentRow) {
+      const baseClass = "w-full px-1 py-0.5 border border-gray-300 rounded text-xs";
+      if (type === 'select' && options) {
+          const selectedValue = (typeof value === 'string' && value) ? value.trim() : '';
+          const optionsHTML = options.map(opt =>
+              `<option value="${opt}" ${selectedValue === opt ? 'selected' : ''}>${opt}</option>`
+          ).join('');
+          return `<select id="input-${key}" name="${key}" class="${baseClass}">
+                      <option value="">Selecione...</option>
+                      ${optionsHTML}
+                  </select>`;
+      }
+
+      const typeAttr = type === 'date' ? 'date' : (type === 'number' ? 'number' : 'text');
+      let displayValue = value || '';
+      if (type === 'date' && displayValue && displayValue.includes('T')) {
+          displayValue = displayValue.split('T')[0];
+      }
+      return `<input type="${typeAttr}" id="input-${key}" name="${key}" value="${displayValue}" class="${baseClass}">`;
+    }
+
+    // ===================== TABELA =====================
+    function renderizarTabela() {
+      tableBody.innerHTML = '';
+      let dadosParaRenderizar = [...linhasOriginais];
+
+      // Filtros
+      dadosParaRenderizar = dadosParaRenderizar.filter(item => {
+          if (item.index === 0) return true; // sempre mostrar a nova linha
+          let passa = true;
+          const plotagemValue = item.acoes || 'Todos';
+
+          if (filtrosAtivos.treinamento !== 'Todos' && item.treinamento !== filtrosAtivos.treinamento) passa = false;
+
+          if (filtrosAtivos.responsaveis !== 'Todos') {
+              const responsaveisDaLinha = (item.responsaveis || '').split(',').map(v => v.trim());
+              if (!responsaveisDaLinha.includes(filtrosAtivos.responsaveis)) passa = false;
+          }
+
+          if (filtrosAtivos.finalizada !== 'Todos' && item.finalizada !== filtrosAtivos.finalizada) passa = false;
+          if (filtrosAtivos.acoes !== 'Todos' && plotagemValue !== filtrosAtivos.acoes) passa = false;
+
+          return passa;
+      });
+
+      if (dadosParaRenderizar.length === 0) {
+          tableBody.innerHTML = '<tr><td colspan="12" class="p-4 text-center text-gray-500">Nenhum dado encontrado para os filtros aplicados.</td></tr>';
+          return;
+      }
+
+      dadosParaRenderizar.forEach(item => {
+          const isNewRow = item.index === 0;
+          const isEditing = item.isEditing || isNewRow;
+
+          const tr = document.createElement('tr');
+          tr.className = isEditing ? "bg-yellow-100 hover:bg-yellow-50" : "hover:bg-gray-50";
+          tr.dataset.rowIndex = item.index;
+
+          let rowHTML = '';
+          rowHTML += `<td class="px-4 py-3 whitespace-nowrap text-xs text-gray-400">${isNewRow ? 'NOVA' : item.index - 1}</td>`;
+
+          columns.forEach(col => {
+              let cellValue = item[col.key] || '';
+              let contentHTML = '';
+
+              if (isEditing) {
+                  if (col.key === 'tempo') {
+                      const dataInicio = item.data_inicio || '';
+                      const dataFim = item.data_fim || '';
+                      const tempoDias = calcularDiferencaDias(dataInicio, dataFim) || cellValue;
+                      contentHTML = `<input type="number" id="input-${col.key}" name="${col.key}" value="${tempoDias}" class="w-full px-1 py-0.5 border border-gray-300 rounded text-xs bg-gray-200" disabled>`;
+                  } else {
+                      contentHTML = generateInputHTML(col.key, cellValue, col.type, col.options, item);
+                  }
+                  rowHTML += `<td class="px-2 py-1 whitespace-nowrap text-sm text-gray-700">${contentHTML}</td>`;
+              } else {
+                  let displayValue = cellValue;
+                  if (col.key === 'data_inicio' || col.key === 'data_fim') {
+                      displayValue = formatarData(cellValue);
+                  } else if (col.key === 'tempo') {
+                      displayValue = calcularDiferencaDias(item.data_inicio, item.data_fim) || cellValue;
+                  }
+                  rowHTML += `<td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700">${displayValue}</td>`;
+              }
+          });
+
+          rowHTML += `<td class="px-2 py-3 whitespace-nowrap text-sm text-blue-600">`;
+          if (isNewRow) {
+              rowHTML += `<button onclick="salvarNovaLinha()" class="bg-green-500 text-white p-1 rounded hover:bg-green-600 font-medium mr-1 text-xs">Salvar</button>
+                          <button onclick="cancelarNovaLinha()" class="text-red-600 hover:text-red-800 font-medium text-xs">Cancelar</button>`;
+          } else if (isEditing) {
+              rowHTML += `<button onclick="salvarEdicao(${item.index})" class="bg-green-500 text-white p-1 rounded hover:bg-green-600 font-medium mr-1 text-xs">Salvar</button>
+                          <button onclick="cancelarEdicao(${item.index})" class="text-red-600 hover:text-red-800 font-medium text-xs">Cancelar</button>`;
+          } else {
+              rowHTML += `<button onclick="iniciarEdicao(${item.index})" class="text-blue-600 hover:text-blue-800 font-medium mr-1 text-xs">Editar</button>
+                          <button onclick="excluirLinha(${item.index})" class="text-red-600 hover:text-red-800 font-medium text-xs">Excluir</button>`;
+          }
+          rowHTML += `</td>`;
+
+          tr.innerHTML = rowHTML;
+          tableBody.appendChild(tr);
+      });
+    }
+
+    // ===================== CARREGAMENTO (GET) =====================
+    async function carregarDadosDaPlanilha() {
+      tableBody.innerHTML = '<tr><td colspan="12" class="p-4 text-center text-gray-500">Carregando dados da planilha...</td></tr>';
+      showLoading();
+
+      try {
+          const response = await fetch(API_URL, { method: 'GET', cache: 'no-cache' });
+          if (!response.ok) throw new Error(`Erro HTTP: ${response.status}`);
+          const data = await response.json();
+
+          if (!Array.isArray(data)) {
+            const msg = (data && data.message) ? data.message : 'Resposta inválida da API.';
+            throw new Error(msg);
+          }
+
+          // Remove eventual "nova" linha local antes de repor os dados do servidor
+          const possuiNova = linhasOriginais.length > 0 && linhasOriginais[0].index === 0;
+          const linhaNova = possuiNova ? linhasOriginais[0] : null;
+
+          // IMPORTANTE: Preservar o index vindo do servidor
+          const serverData = data.map(item => ({ ...item, index: Number(item.index) }));
+
+          linhasOriginais = possuiNova ? [linhaNova, ...serverData] : serverData;
+
+          if (!document.getElementById('content-dashboard').classList.contains('hidden')) {
+              renderizarDashboard();
+          }
+
+          renderizarCabecalho();
+          injetarFiltros();
+          renderizarTabela();
+
+      } catch (error) {
+          console.error("Erro ao carregar dados:", error);
+          alert("Erro ao carregar dados: " + error.message);
+          tableBody.innerHTML = '<tr><td colspan="12" class="p-4 text-center text-red-500">Erro ao carregar dados. Verifique a API.</td></tr>';
+      } finally {
+          hideLoading();
+      }
+    }
+
+    // ===================== AÇÕES (CRUD) =====================
+    async function limparTudo() {
+      if (!confirm("AVISO: Você tem certeza que deseja APAGAR TODOS os dados da planilha?")) return;
+
+      const senha = prompt("Digite a senha de segurança para confirmar a exclusão TOTAL:");
+      if (senha !== SENHA_DE_SEGURANCA) {
+          alert("Senha incorreta. A exclusão total foi cancelada.");
+          return;
+      }
+
+      showLoading();
+
+      try {
+          const response = await fetch(API_URL, {
+              method: 'POST',
+              headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+              body: JSON.stringify({ action: 'deleteAll' }),
+              cache: 'no-cache'
+          });
+
+          const text = await response.text();
+          const result = JSON.parse(text);
+
+          if (result.status === "success") {
+              alert("TODOS os dados foram excluídos com sucesso! Recarregando...");
+              carregarDadosDaPlanilha();
+          } else {
+              alert("Erro ao limpar os dados: " + result.message);
+          }
+      } catch (error) {
+          console.error("Erro na requisição DELETE ALL:", error);
+          alert("Ocorreu um erro ao tentar apagar todos os dados.");
+      } finally {
+          hideLoading();
+      }
+    }
+
+    async function salvarNovaLinha() {
+      showLoading();
+
+      const row = document.querySelector('[data-row-index="0"]');
+      if (!row) { hideLoading(); return; }
+
+      const dadosParaSalvar = {};
+      let isValid = true;
+
+      columns.forEach(col => {
+          const input = row.querySelector(`#input-${col.key}`);
+          if (input) {
+              if (col.key === 'tempo') {
+                  const dataInicio = row.querySelector(`#input-data_inicio`).value;
+                  const dataFim = row.querySelector(`#input-data_fim`).value;
+                  dadosParaSalvar[col.key] = calcularDiferencaDias(dataInicio, dataFim) || 0;
+              } else {
+                  dadosParaSalvar[col.key] = input.value;
+              }
+              if (col.key === 'unidade' && !dadosParaSalvar[col.key].trim()) isValid = false;
+          }
+      });
+
+      if (!isValid) {
+          alert("O campo 'Unidade' é obrigatório.");
+          hideLoading();
+          return;
+      }
+
+      dadosParaSalvar.action = 'create';
+
+      try {
+          const response = await fetch(API_URL, {
+              method: 'POST',
+              headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+              body: JSON.stringify(dadosParaSalvar),
+              cache: 'no-cache'
+          });
+
+          const text = await response.text();
+          const result = JSON.parse(text);
+
+          if (result.status === "success") {
+              alert("Nova linha adicionada com sucesso!");
+              linhasOriginais = linhasOriginais.filter(l => l.index !== 0);
+              carregarDadosDaPlanilha();
+          } else {
+              alert("Erro ao salvar na planilha: " + result.message);
+          }
+      } catch (error) {
+          console.error("Erro na requisição POST:", error);
+          alert("Erro de rede ao tentar salvar. Verifique a autorização da API.");
+      } finally {
+          hideLoading();
+      }
+    }
+
+    async function salvarEdicao(index) {
+      showLoading();
+
+      const row = document.querySelector(`[data-row-index="${index}"]`);
+      if (!row) { hideLoading(); return; }
+
+      const dadosParaAtualizar = {};
+      let isValid = true;
+
+      columns.forEach(col => {
+          const input = row.querySelector(`#input-${col.key}`);
+          if (input) {
+              if (col.key === 'tempo') {
+                  const dataInicio = row.querySelector(`#input-data_inicio`).value;
+                  const dataFim = row.querySelector(`#input-data_fim`).value;
+                  dadosParaAtualizar[col.key] = calcularDiferencaDias(dataInicio, dataFim) || 0;
+              } else {
+                  dadosParaAtualizar[col.key] = input.value;
+              }
+              if (col.key === 'unidade' && !dadosParaAtualizar[col.key].trim()) isValid = false;
+          }
+      });
+
+      if (!isValid) {
+          alert("O campo 'Unidade' é obrigatório.");
+          hideLoading();
+          return;
+      }
+
+      dadosParaAtualizar.index = index;
+      dadosParaAtualizar.action = 'update';
+
+      try {
+          const response = await fetch(API_URL, {
+              method: 'POST',
+              headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+              body: JSON.stringify(dadosParaAtualizar),
+              cache: 'no-cache'
+          });
+
+          const text = await response.text();
+          const result = JSON.parse(text);
+
+          if (result.status === "success") {
+              const itemIndex = linhasOriginais.findIndex(l => l.index === index);
+              if (itemIndex > -1) {
+                  const updatedItem = { ...linhasOriginais[itemIndex], ...dadosParaAtualizar, isEditing: false };
+                  delete updatedItem.originalData;
+                  linhasOriginais[itemIndex] = updatedItem;
+              }
+              alert("Linha atualizada com sucesso!");
+              renderizarTabela();
+          } else {
+              alert("Erro ao atualizar a linha: " + result.message);
+          }
+      } catch (error) {
+          console.error("Erro na requisição POST/PUT:", error);
+          alert("Erro de rede ao tentar atualizar. Verifique a API.");
+      } finally {
+          hideLoading();
+      }
+    }
+
+    async function excluirLinha(index) {
+      if (!confirm(`Tem certeza que deseja EXCLUIR a linha ${index - 1}? Esta ação é irreversível.`)) return;
+
+      const senha = prompt(`Digite a senha de segurança para excluir a linha ${index - 1}:`);
+      if (senha !== SENHA_DE_SEGURANCA) {
+          alert("Senha incorreta. A exclusão da linha foi cancelada.");
+          return;
+      }
+
+      showLoading();
+
+      try {
+          const response = await fetch(API_URL, {
+              method: 'POST',
+              headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+              body: JSON.stringify({ action: 'delete', index: index }),
+              cache: 'no-cache'
+          });
+
+          const text = await response.text();
+          const result = JSON.parse(text);
+
+          if (result.status === "success") {
+              alert("Linha excluída com sucesso! Recarregando dados...");
+              carregarDadosDaPlanilha();
+          } else {
+              alert("Erro ao excluir a linha: " + result.message);
+          }
+      } catch (error) {
+          console.error("Erro na requisição DELETE:", error);
+          alert("Erro de rede ao tentar excluir.");
+      } finally {
+          hideLoading();
+      }
+    }
+
+    function adicionarLinhaLocalmente() {
+      if (linhasOriginais.some(l => l.index === 0)) {
+          alert("Já existe uma linha nova em edição. Salve ou cancele antes de criar outra.");
+          return;
+      }
+
+      const novaLinha = {
+          index: 0,
+          unidade: columns.find(c => c.key === 'unidade')?.options[0] || 'SEMAIA',
+          tipo_de_unidade: columns.find(c => c.key === 'tipo_de_unidade')?.options[0] || 'UBS',
+          tipo_de_ambiente: columns.find(c => c.key === 'tipo_de_ambiente')?.options[0] || 'Totem',
+          data_inicio: new Date().toISOString().split('T')[0],
+          data_fim: '',
+          tempo: 0,
+          treinamento: 'Pendente',
+          responsaveis: columns.find(c => c.key === 'responsaveis')?.options[0] || 'Maclaud',
+          acompanhamento: 'Não Realizado',
+          finalizada: 'Não',
+          acoes: 'Aguardando',
+          isEditing: true
+      };
+
+      linhasOriginais.unshift(novaLinha);
+      renderizarTabela();
+    }
+
+    function cancelarNovaLinha() {
+      linhasOriginais = linhasOriginais.filter(l => l.index !== 0);
+      renderizarTabela();
+    }
+
+    function iniciarEdicao(index) {
+      linhasOriginais.forEach(item => { item.isEditing = false; });
+      const item = linhasOriginais.find(l => l.index === index);
+      if (item) {
+          item.isEditing = true;
+          item.originalData = { ...item };
+      }
+      renderizarTabela();
+    }
+
+    function cancelarEdicao(index) {
+      const itemIndex = linhasOriginais.findIndex(l => l.index === index);
+      if (itemIndex > -1) {
+          if (linhasOriginais[itemIndex].originalData) {
+              linhasOriginais[itemIndex] = linhasOriginais[itemIndex].originalData;
+          }
+          linhasOriginais[itemIndex].isEditing = false;
+          renderizarTabela();
+      }
+    }
+
+    // ===================== DASHBOARD =====================
+    function renderizarDashboard() {
+      if (document.getElementById('content-dashboard').classList.contains('hidden')) return;
+
+      const totalLinhas = linhasOriginais.filter(l => l.index !== 0).length;
+      document.getElementById('dashboard-total').textContent = totalLinhas;
+
+      if (totalLinhas === 0) {
+          document.querySelector('#content-dashboard > .grid').innerHTML =
+              '<p class="text-center text-gray-500 col-span-4">Nenhum dado para exibir no dashboard.</p>';
+          return;
+      }
+
+      const metricas = {
+          treinamento: {
+              key: 'treinamento',
+              labels: ['OK', 'Em Andamento', 'Pendente'],
+              colors: ['#10B981', '#F59E0B', '#EF4444']
+          },
+          acompanhamento: {
+              key: 'acompanhamento',
+              labels: ['Realizado', 'Não Realizado'],
+              colors: ['#EF4444', '#F59E0B']
+          },
+          finalizada: {
+              key: 'finalizada',
+              labels: ['Sim', 'Não'],
+              colors: ['#3B82F6', '#6B7280']
+          },
+          plotagem: {
+              key: 'acoes',
+              labels: ['Realizado', 'Aguardando', 'Pendente'],
+              colors: ['#10B981', '#F59E0B', '#EF4444']
+          }
+      };
+
+      const linhasSalvas = linhasOriginais.filter(l => l.index !== 0);
+
+      Object.keys(metricas).forEach(metricName => {
+          const metric = metricas[metricName];
+
+          const contagem = linhasSalvas.reduce((acc, item) => {
+              const value = item[metric.key] || 'Não Informado';
+              acc[value] = (acc[value] || 0) + 1;
+              return acc;
+          }, {});
+
+          const chartData = metric.labels.map(label => contagem[label] || 0);
+          const chartLabels = metric.labels;
+          const chartColors = metric.colors;
+
+          createDoughnutChart(
+              `chart-${metricName}`,
+              `legend-${metricName}`,
+              `${metricName}-total-percent`,
+              chartLabels,
+              chartData,
+              chartColors,
+              totalLinhas
+          );
+      });
+    }
+
+    function createDoughnutChart(canvasId, legendId, totalId, labels, data, colors, total) {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return;
+
+      if (charts[canvasId]) charts[canvasId].destroy();
+
+      const percentages = data.map(value => total > 0 ? ((value / total) * 100).toFixed(2) : '0.00');
+      const totalDone = data.reduce((sum, value) => sum + value, 0);
+      document.getElementById(totalId).textContent = `${totalDone}`;
+
+      const chartConfig = {
+          type: 'doughnut',
+          data: { labels, datasets: [{ data, backgroundColor: colors, borderColor: '#ffffff', borderWidth: 2 }] },
+          options: {
+              responsive: true,
+              maintainAspectRatio: true,
+              cutout: '75%',
+              plugins: {
+                  legend: { display: false },
+                  tooltip: {
+                      callbacks: {
+                          label: function(context) {
+                              let label = context.label || '';
+                              if (label) label += ': ';
+                              const value = context.parsed;
+                              const percentage = total > 0 ? ((value / total) * 100).toFixed(2) + '%' : '0.00%';
+                              return `${label}${value} (${percentage})`;
+                          }
+                      }
+                  }
+              }
+          }
+      };
+
+      charts[canvasId] = new Chart(canvas, chartConfig);
+
+      const legendContainer = document.getElementById(legendId);
+      if (legendContainer) {
+          legendContainer.innerHTML = labels.map((label, index) => {
+              const count = data[index];
+              const percentage = percentages[index];
+              const color = colors[index];
+
+              let emoji = '⬜';
+              if (label.includes('OK') || label.includes('Realizado') || label.includes('Sim')) emoji = '✅';
+              else if (label.includes('Pendente') || label.includes('Não Realizado')) emoji = '🔴';
+              else if (label.includes('Andamento') || label.includes('Aguardando')) emoji = '🟡';
+
+              return `
+                  <div class="flex justify-between items-center py-1">
+                      <span class="flex items-center">
+                          <span class="w-2.5 h-2.5 rounded-full mr-2" style="background-color: ${color};"></span>
+                          ${emoji} ${label}:
+                      </span>
+                      <span class="font-medium text-gray-700">${percentage}% (${count})</span>
+                  </div>
+              `;
+          }).join('');
+      }
+    }
+
+    // ===================== CABEÇALHO / FILTROS =====================
+    function renderizarCabecalho() {
+      tableHead.innerHTML = '';
+      const trHead = document.createElement('tr');
+      trHead.innerHTML = '<th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Entrega</th>';
+      columns.forEach(col => {
+          const th = document.createElement('th');
+          th.className = "px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider";
+          th.textContent = col.label;
+          trHead.appendChild(th);
+      });
+      trHead.innerHTML += '<th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>';
+      tableHead.appendChild(trHead);
+    }
+
+    function injetarFiltros() {
+      const filterKeys = ['treinamento', 'responsaveis', 'finalizada', 'acoes'];
+      filterControls.innerHTML = '';
+
+      filterKeys.forEach(key => {
+          const col = columns.find(c => c.key === key);
+          if (!col || !col.options) return;
+
+          const labelText = col.key === 'acoes' ? 'Plotagem' : col.label;
+
+          const div = document.createElement('div');
+          div.className = "flex flex-col";
+          div.innerHTML = `
+              <label for="filter-${key}" class="text-sm font-medium text-gray-700 mb-1">${labelText}:</label>
+              <select id="filter-${key}" onchange="aplicarFiltros()" class="border border-gray-300 p-2 rounded-lg text-sm w-40">
+                  <option value="Todos">Todos</option>
+                  ${col.options.map(opt => `<option value="${opt}" ${filtrosAtivos[key] === opt ? 'selected' : ''}>${opt}</option>`).join('')}
+              </select>
+          `;
+          filterControls.appendChild(div);
+      });
+
+      const clearButton = document.createElement('button');
+      clearButton.id = 'limpar-filtros';
+      clearButton.className = "bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg self-end";
+      clearButton.textContent = 'Limpar Filtros';
+      clearButton.onclick = limparFiltros;
+      filterControls.appendChild(clearButton);
+    }
+
+    function aplicarFiltros() {
+      const filterKeys = ['treinamento', 'responsaveis', 'finalizada', 'acoes'];
+      filterKeys.forEach(key => {
+          const selectElement = document.getElementById(`filter-${key}`);
+          if (selectElement) filtrosAtivos[key] = selectElement.value;
+      });
+      renderizarTabela();
+    }
+
+    function limparFiltros() {
+      const filterKeys = ['treinamento', 'responsaveis', 'finalizada', 'acoes'];
+      filterKeys.forEach(key => {
+          filtrosAtivos[key] = 'Todos';
+          const selectElement = document.getElementById(`filter-${key}`);
+          if (selectElement) selectElement.value = 'Todos';
+      });
+      renderizarTabela();
+    }
+
+    // ===================== CALENDÁRIO =====================
+    const UNIT_COLORS = {
+        'SEMAIA': { bg: 'bg-indigo-600', hover: 'hover:bg-indigo-700' },
+        'Centro': { bg: 'bg-purple-600', hover: 'hover:bg-purple-700' },
+        'Hesio Cordeiro': { bg: 'bg-teal-600', hover: 'hover:bg-teal-700' },
+        'Arrozal': { bg: 'bg-pink-600', hover: 'hover:bg-pink-700' },
+        'Cacaria': { bg: 'bg-orange-600', hover: 'hover:bg-orange-700' },
+
+        'Unidade Mista Sana': { bg: 'bg-cyan-600', hover: 'hover:bg-cyan-700' },
+        'Clínica do Autista': { bg: 'bg-green-600', hover: 'hover:bg-green-700' },
+        'UBS Novo Cavaleiros': { bg: 'bg-blue-600', hover: 'hover:bg-blue-700' },
+        'Pronto Socorro Imbetiba': { bg: 'bg-red-600', hover: 'hover:bg-red-700' },
+        'UPA Lagomar': { bg: 'bg-yellow-600', hover: 'hover:bg-yellow-700' },
+    };
+
+    let currentCalendarDate = new Date();
+
+    function renderizarCalendario() {
+      const grid = document.getElementById('calendar-grid');
+      const title = document.getElementById('current-month-year');
+      const legendContainer = document.getElementById('calendar-legend');
+      grid.innerHTML = '';
+
+      const year = currentCalendarDate.getFullYear();
+      const month = currentCalendarDate.getMonth();
+
+      const date = new Date(year, month, 1);
+      const firstDayOfMonth = date.getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+      const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+      title.textContent = `${monthNames[month]} de ${year}`;
+
+      for (let i = 0; i < firstDayOfMonth; i++) {
+          const emptyCell = document.createElement('div');
+          emptyCell.className = 'p-2 h-28 border-b border-gray-300 bg-gray-50';
+          grid.appendChild(emptyCell);
+      }
+
+      for (let day = 1; day <= daysInMonth; day++) {
+          const cell = document.createElement('div');
+          cell.className = 'p-1 h-28 border-b border-gray-300 flex flex-col items-end relative overflow-y-auto custom-scrollbar';
+          cell.id = `calendar-day-${year}-${month + 1}-${day}`;
+
+          const dayNumber = document.createElement('div');
+          dayNumber.className = 'text-sm font-semibold text-gray-700 absolute top-1 right-2';
+          dayNumber.textContent = day;
+          cell.appendChild(dayNumber);
+
+          const eventContainer = document.createElement('div');
+          eventContainer.className = 'w-full mt-6 space-y-0.5';
+          cell.appendChild(eventContainer);
+
+          grid.appendChild(cell);
+      }
+
+      const eventos = gerarEventosDoMes(year, month + 1);
+      eventos.forEach(evento => {
+          const cellId = `calendar-day-${evento.year}-${evento.month}-${evento.day}`;
+          const cell = document.getElementById(cellId);
+
+          if (cell) {
+              const eventElement = document.createElement('div');
+              const colors = UNIT_COLORS[evento.unidade] || { bg: 'bg-gray-500', hover: 'hover:bg-gray-600' };
+
+              eventElement.className = `w-full text-white text-[10px] p-0.5 rounded ${colors.bg} ${colors.hover} truncate cursor-pointer text-center`;
+              eventElement.title = evento.unidade;
+              eventElement.textContent = evento.unidade;
+
+              cell.querySelector('.mt-6.space-y-0\\.5').appendChild(eventElement);
+          }
+      });
+
+      renderizarLegenda(legendContainer);
+    }
+
+    function gerarEventosDoMes(year, month) {
+      const linhasSalvas = linhasOriginais.filter(l => l.index !== 0);
+      const eventos = [];
+
+      linhasSalvas.forEach(linha => {
+          const { unidade, data_inicio, data_fim } = linha;
+          if (!unidade || !data_inicio || !data_fim) return;
+
+          const start = new Date(data_inicio);
+          const end = new Date(data_fim);
+
+          for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+              if (d.getFullYear() === year && d.getMonth() + 1 === month) {
+                  eventos.push({
+                      unidade: unidade,
+                      day: d.getDate(),
+                      month: d.getMonth() + 1,
+                      year: d.getFullYear(),
+                  });
+              }
+          }
+      });
+
+      return eventos;
+    }
+
+    function renderizarLegenda(container) {
+      container.innerHTML = '';
+      const uniqueUnits = [...new Set(linhasOriginais.filter(l => l.index !== 0).map(l => l.unidade))].filter(u => u);
+
+      uniqueUnits.forEach(unit => {
+          const colors = UNIT_COLORS[unit] || { bg: 'bg-gray-500' };
+          const legendItem = document.createElement('div');
+          legendItem.className = 'flex items-center';
+          legendItem.innerHTML = `
+              <span class="w-4 h-4 rounded mr-2 ${colors.bg}"></span>
+              <span class="text-gray-700">${unit}</span>
+          `;
+          container.appendChild(legendItem);
+      });
+    }
+
+    function changeMonth(delta) {
+      currentCalendarDate.setMonth(currentCalendarDate.getMonth() + delta);
+      renderizarCalendario();
+    }
+
+    // ===================== EVENTOS DE UI =====================
+    document.addEventListener('DOMContentLoaded', carregarDadosDaPlanilha);
+    document.getElementById('addRow').addEventListener('click', adicionarLinhaLocalmente);
+    document.getElementById('clr').addEventListener('click', limparTudo);
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('prev-month').addEventListener('click', () => changeMonth(-1));
+      document.getElementById('next-month').addEventListener('click', () => changeMonth(1));
+    });
+
+    const originalSwitchTab = window.switchTab;
+    window.switchTab = (tabName) => {
+      originalSwitchTab(tabName);
+      if (tabName === 'calendario') {
+          renderizarCalendario();
+      }
+    };
+  </script>
+</body>
+</html>
