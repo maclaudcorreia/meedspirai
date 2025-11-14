@@ -12,60 +12,81 @@
 </head>
 
 <body class="bg-blue-50 font-sans">
-
+  <!-- Overlay de Loading -->
   <div id="loading-overlay" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50 hidden">
-      <div class="bg-white p-6 rounded-lg shadow-2xl flex items-center">
-          <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-indigo-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-          </svg>
-          <span class="text-indigo-700 font-semibold">Processando...</span>
-      </div>
+    <div class="bg-white p-6 rounded-lg shadow-2xl flex items-center">
+      <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-indigo-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      </svg>
+      <span class="text-indigo-700 font-semibold">Processando...</span>
+    </div>
   </div>
 
   <div class="container mx-auto p-4 sm:p-6 lg:p-8">
-
+    <!-- Cabeçalho -->
     <div class="bg-white shadow-lg rounded-lg p-6 mb-8 border border-gray-100">
-        <div class="flex flex-col items-center justify-center text-center">
-            <img src="logo%20pirai.png" alt="Logo Piraí" class="h-16 mb-4" />
-            <h1 class="text-4xl font-extrabold text-indigo-800 mb-1">MEEDS Piraí - Controle Operacional</h1>
-            <p class="text-gray-500 text-lg font-light">Monitoramento dos Processos Operacionais por Unidade.</p>
-        </div>
+      <div class="flex flex-col items-center justify-center text-center">
+        <img src="logo%20pirai.png" alt="Logo Piraí" class="h-16 mb-4" />
+        <h1 class="text-4xl font-extrabold text-indigo-800 mb-1">MEEDS Piraí - Controle Operacional</h1>
+        <p class="text-gray-500 text-lg font-light">Monitoramento dos Processos Operacionais por Unidade.</p>
+      </div>
     </div>
 
+    <!-- Barra de ações -->
     <div class="flex justify-between items-center mb-4 p-4 bg-white rounded-lg shadow-md border border-gray-100">
       <div class="flex gap-4">
+        <!-- Nova linha -->
         <button id="addRow" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg flex items-center">
-          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+          </svg>
           Nova Linha
         </button>
+
+        <!-- Apagar tudo -->
         <button id="clr" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg flex items-center">
-          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-          Limpar Tudo
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+          </svg>
+          Apagar Tudo
+        </button>
+
+        <!-- Sincronizar -->
+        <button id="reload" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg flex items-center">
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v6h6M20 20v-6h-6M5 19a9 9 0 0014-7V9M19 5A9 9 0 005 12v3"/>
+          </svg>
+          Sincronizar
         </button>
       </div>
-      <button class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded-lg">
+
+      <!-- Exportar PDF -->
+      <button id="export-pdf" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded-lg">
         Exportar Dados
       </button>
     </div>
 
+    <!-- Filtros -->
     <div class="bg-white shadow-lg rounded-lg p-6 mb-8 border border-gray-100">
       <h2 class="text-xl font-semibold text-gray-700 mb-3">Filtros Rápidos:</h2>
       <div class="flex flex-wrap gap-4 items-end" id="filter-controls"></div>
     </div>
 
+    <!-- Abas -->
     <div class="flex border-b border-blue-200 mb-4 bg-white rounded-t-lg shadow-md">
-        <button id="tab-tabela" onclick="switchTab('tabela')" class="px-6 py-3 text-sm font-medium border-b-2 border-indigo-500 text-indigo-700 transition-colors duration-200 focus:outline-none">
-            Tabela de Processos
-        </button>
-        <button id="tab-dashboard" onclick="switchTab('dashboard')" class="px-6 py-3 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-indigo-700 transition-colors duration-200 focus:outline-none">
-            Dashboard de Status
-        </button>
-        <button id="tab-calendario" onclick="switchTab('calendario')" class="px-6 py-3 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-indigo-700 transition-colors duração-200 focus:outline-none">
-            Calendário
-        </button>
+      <button id="tab-tabela" onclick="switchTab('tabela')" class="px-6 py-3 text-sm font-medium border-b-2 border-indigo-500 text-indigo-700 transition-colors duration-200 focus:outline-none">
+        Tabela de Processos
+      </button>
+      <button id="tab-dashboard" onclick="switchTab('dashboard')" class="px-6 py-3 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-indigo-700 transition-colors duration-200 focus:outline-none">
+        Dashboard de Status
+      </button>
+      <button id="tab-calendario" onclick="switchTab('calendario')" class="px-6 py-3 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-indigo-700 transition-colors duração-200 focus:outline-none">
+        Calendário
+      </button>
     </div>
 
+    <!-- Conteúdo: Tabela -->
     <div id="content-tabela" class="tab-content">
       <div class="bg-white shadow-lg rounded-b-lg border border-gray-100 overflow-x-auto">
         <table class="min-w-[1500px] divide-y divide-gray-200">
@@ -81,906 +102,1154 @@
       </div>
     </div>
 
+    <!-- Conteúdo: Dashboard -->
     <div id="content-dashboard" class="tab-content hidden p-8 bg-white shadow-lg rounded-lg border border-gray-100 mb-8">
-        <h2 class="text-3xl font-bold text-gray-700 mb-2 text-center">Visão Geral dos Processos</h2>
-        <h3 class="text-xl font-medium text-gray-600 mb-6 text-center">Total de Processos: <span id="dashboard-total" class="font-bold text-indigo-600">0</span></h3>
+      <h2 class="text-3xl font-bold text-gray-700 mb-2 text-center">Visão Geral dos Processos</h2>
+      <h3 class="text-xl font-medium text-gray-600 mb-6 text-center">
+        Total de Processos: <span id="dashboard-total" class="font-bold text-indigo-600">0</span>
+      </h3>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-
-            <div class="bg-white p-6 rounded-lg shadow-md border border-gray-100 flex flex-col items-center h-full">
-                <h4 class="text-lg font-semibold text-gray-700 mb-3 text-center">Progresso Treinamento</h4>
-                <div class="relative w-40 h-40">
-                    <canvas id="chart-treinamento"></canvas>
-                    <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
-                        <span class="text-2xl font-bold text-gray-800" id="treinamento-total-percent"></span>
-                        <span class="text-xs text-gray-500">Total</span>
-                    </div>
-                </div>
-                <div id="legend-treinamento" class="mt-4 text-sm w-full"></div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Treinamento -->
+        <div class="bg-white p-6 rounded-lg shadow-md border border-gray-100 flex flex-col items-center h-full">
+          <h4 class="text-lg font-semibold text-gray-700 mb-3 text-center">Progresso Treinamento</h4>
+          <div class="relative w-40 h-40">
+            <canvas id="chart-treinamento"></canvas>
+            <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+              <span class="text-2xl font-bold text-gray-800" id="treinamento-total-percent"></span>
+              <span class="text-xs text-gray-500">Total</span>
             </div>
-
-            <div class="bg-white p-6 rounded-lg shadow-md border border-gray-100 flex flex-col items-center h-full">
-                <h4 class="text-lg font-semibold text-gray-700 mb-3 text-center">Progresso Acompanhamento</h4>
-                <div class="relative w-40 h-40">
-                    <canvas id="chart-acompanhamento"></canvas>
-                    <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
-                        <span class="text-2xl font-bold text-gray-800" id="acompanhamento-total-percent"></span>
-                        <span class="text-xs text-gray-500">Total</span>
-                    </div>
-                </div>
-                <div id="legend-acompanhamento" class="mt-4 text-sm w-full"></div>
-            </div>
-
-            <div class="bg-white p-6 rounded-lg shadow-md border border-gray-100 flex flex-col items-center h-full">
-                <h4 class="text-lg font-semibold text-gray-700 mb-3 text-center">Status Finalizado</h4>
-                <div class="relative w-40 h-40">
-                    <canvas id="chart-finalizada"></canvas>
-                    <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
-                        <span class="text-2xl font-bold text-gray-800" id="finalizada-total-percent"></span>
-                        <span class="text-xs text-gray-500">Total</span>
-                    </div>
-                </div>
-                <div id="legend-finalizada" class="mt-4 text-sm w-full"></div>
-            </div>
-
-            <div class="bg-white p-6 rounded-lg shadow-md border border-gray-100 flex flex-col items-center h-full">
-                <h4 class="text-lg font-semibold text-gray-700 mb-3 text-center">Progresso Plotagem</h4>
-                <div class="relative w-40 h-40">
-                    <canvas id="chart-plotagem"></canvas>
-                    <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
-                        <span class="text-2xl font-bold text-gray-800" id="plotagem-total-percent"></span>
-                        <span class="text-xs text-gray-500">Total</span>
-                    </div>
-                </div>
-                <div id="legend-plotagem" class="mt-4 text-sm w-full"></div>
-            </div>
-
+          </div>
+          <div id="legend-treinamento" class="mt-4 text-sm w-full"></div>
         </div>
+
+        <!-- Acompanhamento -->
+        <div class="bg-white p-6 rounded-lg shadow-md border border-gray-100 flex flex-col items-center h-full">
+          <h4 class="text-lg font-semibold text-gray-700 mb-3 text-center">Progresso Acompanhamento</h4>
+          <div class="relative w-40 h-40">
+            <canvas id="chart-acompanhamento"></canvas>
+            <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+              <span class="text-2xl font-bold text-gray-800" id="acompanhamento-total-percent"></span>
+              <span class="text-xs text-gray-500">Total</span>
+            </div>
+          </div>
+          <div id="legend-acompanhamento" class="mt-4 text-sm w-full"></div>
+        </div>
+
+        <!-- Finalizado -->
+        <div class="bg-white p-6 rounded-lg shadow-md border border-gray-100 flex flex-col items-center h-full">
+          <h4 class="text-lg font-semibold text-gray-700 mb-3 text-center">Status Finalizado</h4>
+          <div class="relative w-40 h-40">
+            <canvas id="chart-finalizada"></canvas>
+            <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+              <span class="text-2xl font-bold text-gray-800" id="finalizada-total-percent"></span>
+              <span class="text-xs text-gray-500">Total</span>
+            </div>
+          </div>
+          <div id="legend-finalizada" class="mt-4 text-sm w-full"></div>
+        </div>
+
+        <!-- Plotagem -->
+        <div class="bg-white p-6 rounded-lg shadow-md border border-gray-100 flex flex-col items-center h-full">
+          <h4 class="text-lg font-semibold text-gray-700 mb-3 text-center">Progresso Plotagem</h4>
+          <div class="relative w-40 h-40">
+            <canvas id="chart-plotagem"></canvas>
+            <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+              <span class="text-2xl font-bold text-gray-800" id="plotagem-total-percent"></span>
+              <span class="text-xs text-gray-500">Total</span>
+            </div>
+          </div>
+          <div id="legend-plotagem" class="mt-4 text-sm w-full"></div>
+        </div>
+      </div>
     </div>
 
+    <!-- Conteúdo: Calendário -->
     <div id="content-calendario" class="tab-content hidden p-8 bg-white shadow-lg rounded-lg border border-gray-100 mb-8">
-        <h2 class="text-3xl font-bold text-gray-700 mb-4 text-center">Calendário de Entregas</h2>
+      <h2 class="text-3xl font-bold text-gray-700 mb-4 text-center">Calendário de Entregas</h2>
 
-        <div class="flex justify-between items-center mb-6 max-w-lg mx-auto">
-            <button id="prev-month" class="p-2 text-indigo-600 hover:text-indigo-800 font-bold text-2xl">
-                &lt;
-            </button>
-            <h3 id="current-month-year" class="text-2xl font-semibold text-gray-700">Novembro de 2025</h3>
-            <button id="next-month" class="p-2 text-indigo-600 hover:text-indigo-800 font-bold text-2xl">
-                &gt;
-            </button>
+      <div class="flex justify-between items-center mb-6 max-w-lg mx-auto">
+        <button id="prev-month" class="p-2 text-indigo-600 hover:text-indigo-800 font-bold text-2xl">&lt;</button>
+        <h3 id="current-month-year" class="text-2xl font-semibold text-gray-700">Mês de Referência</h3>
+        <button id="next-month" class="p-2 text-indigo-600 hover:text-indigo-800 font-bold text-2xl">&gt;</button>
+      </div>
+
+      <div id="calendar-container" class="border border-gray-300 rounded-lg overflow-hidden">
+        <div class="grid grid-cols-7 text-center bg-blue-600 text-white font-bold text-lg">
+          <div class="p-3">Dom</div><div class="p-3">Seg</div><div class="p-3">Ter</div><div class="p-3">Qua</div>
+          <div class="p-3">Qui</div><div class="p-3">Sex</div><div class="p-3">Sáb</div>
         </div>
+        <div id="calendar-grid" class="grid grid-cols-7 min-h-[600px] divide-x divide-gray-300 border-t border-gray-300"></div>
+      </div>
 
-        <div id="calendar-container" class="border border-gray-300 rounded-lg overflow-hidden">
-            <div class="grid grid-cols-7 text-center bg-blue-600 text-white font-bold text-lg">
-                <div class="p-3">Dom</div>
-                <div class="p-3">Seg</div>
-                <div class="p-3">Ter</div>
-                <div class="p-3">Qua</div>
-                <div class="p-3">Qui</div>
-                <div class="p-3">Sex</div>
-                <div class="p-3">Sáb</div>
-            </div>
-
-            <div id="calendar-grid" class="grid grid-cols-7 min-h-[600px] divide-x divide-gray-300 border-t border-gray-300"></div>
-        </div>
-
-        <div class="mt-8">
-            <h4 class="text-lg font-semibold text-gray-700 mb-3">Legenda por Unidade:</h4>
-            <div id="calendar-legend" class="flex flex-wrap gap-x-6 gap-y-2 text-sm"></div>
-        </div>
+      <div class="mt-8">
+        <h4 class="text-lg font-semibold text-gray-700 mb-3">Legenda por Unidade:</h4>
+        <div id="calendar-legend" class="flex flex-wrap gap-x-6 gap-y-2 text-sm"></div>
+      </div>
     </div>
-
   </div>
 
   <script>
-    // ########################################################################
-    // ⚠️ Cole aqui a URL da implantação do seu Apps Script (Web App /exec)
-    // ########################################################################
-    const API_URL = "https://script.google.com/macros/s/AKfycbynjRpa4xagZqDorHpBJ-2o2d_1K0uHlt-pAZXRzhfbR4xUe5xXp3z7hCRLxaVzWrSqPg/exec";
+      // ===================== CONFIG =====================
+      const API_URL = "https://script.google.com/macros/s/AKfycbw7Mr9U-mP-rGtsy1W-T4rOfBXyzP1QkM23aTm22--qBRTZsw1cqOR7FSgIv2OLWss/exec";
+      const SENHA_DE_SEGURANCA = "1#@";
 
-    // Senha de segurança para ações destrutivas
-    const SENHA_DE_SEGURANCA = "1#@";
+      const UNIDADE_KEY = "unidade__equipamento";
 
-    let linhasOriginais = [];
-    let filtrosAtivos = {
-        treinamento: 'Todos',
-        responsaveis: 'Todos',
-        finalizada: 'Todos',
-        acoes: 'Todos' // <— unificado
-    };
-    let charts = {};
+      let linhasOriginais = [];
 
-    const columns = [
-      { key: 'unidade', label: 'Unidade', type: 'select', options: ['SEMAIA', 'Centro', 'Hesio Cordeiro' ,'Arrozal', 'Cacaria'] },
-      { key: 'tipo_de_unidade', label: 'Tipo de Unidade', type: 'select', options: ['UBS', 'UPA', 'Hospital', 'Pronto Socorro'] },
-      { key: 'tipo_de_ambiente',label: 'Tipo de Ambiente', type: 'select', options: ['Totem','Cabine','Cabine Acessibilidade'] },
-      { key: 'data_inicio', label: 'Data Início', type: 'date' },
-      { key: 'data_fim', label: 'Data Fim', type: 'date' },
-      { key: 'tempo', label: 'Tempo', type: 'number' },
-      { key: 'treinamento', label: 'Treinamento', type: 'select', options: ['OK','Em Andamento','Pendente'] },
-      { key: 'responsaveis', label: 'Responsáveis', type: 'select', options: ['Maclaud','Marcelo','Alan', 'Calimed'] },
-      { key: 'acompanhamento', label: 'Acompanhamento', type: 'select', options: ['Realizado','Não Realizado'] },
-      { key: 'finalizada', label: 'FINALIZADA', type: 'select', options: ['Sim', 'Não'] },
-      { key: 'acoes', label: 'Plotagem', type: 'select', options: ['Realizado', 'Aguardando', 'Pendente'] }
-    ];
+      let charts = {};
 
-    const tableBody = document.getElementById('table-body');
-    const tableHead = document.getElementById('table-head');
-    const filterControls = document.getElementById('filter-controls');
+      // Cores fixas por status (para os 4 gráficos)
+      const STATUS_COLORS = {
+        treinamento: {
+          "Em Andamento":   { dot: "bg-blue-600",   text: "text-blue-600",   chart: "#2563EB" },
+          "Concluído (Ok)": { dot: "bg-green-600",  text: "text-green-600",  chart: "#16A34A" },
+          "Pendente":       { dot: "bg-yellow-500", text: "text-yellow-500", chart: "#EAB308" }
+        },
+        acompanhamento: {
+          "Realizado":      { dot: "bg-amber-500",  text: "text-amber-500",  chart: "#F59E0B" },
+          "Não Realizado":  { dot: "bg-red-500",    text: "text-red-500",    chart: "#EF4444" }
+        },
+        finalizado: {
+          "Sim":            { dot: "bg-blue-600",   text: "text-blue-600",   chart: "#2563EB" },
+          "Não":            { dot: "bg-slate-400",  text: "text-slate-500",  chart: "#9CA3AF" }
+        },
+        plotagem: {
+          "Realizado":      { dot: "bg-green-600",  text: "text-green-600",  chart: "#16A34A" },
+          "Aguardando":     { dot: "bg-amber-500",  text: "text-amber-500",  chart: "#F59E0B" },
+          "Pendente":       { dot: "bg-slate-600",  text: "text-slate-600",  chart: "#4B5563" }
+        }
+      };
 
-    // ===================== LOADING & ABAS =====================
-    function showLoading() {
-      document.getElementById('loading-overlay').classList.remove('hidden');
-    }
-    function hideLoading() {
-      document.getElementById('loading-overlay').classList.add('hidden');
-    }
+  // Cores reserva caso apareça algum valor diferente
+  const DEFAULT_CHART_COLORS = ["#2563EB","#16A34A","#F59E0B","#EF4444","#6B7280"];
 
-    function switchTab(tabName) {
-      document.querySelectorAll('.tab-content').forEach(content => content.classList.add('hidden'));
-      document.querySelectorAll('[id^="tab-"]').forEach(button => {
-          button.classList.remove('border-indigo-500', 'text-indigo-700');
-          button.classList.add('border-transparent', 'text-gray-500', 'hover:text-indigo-700');
-      });
 
-      const selectedContent = document.getElementById(`content-${tabName}`);
-      const selectedButton = document.getElementById(`tab-${tabName}`);
-      if (selectedContent) selectedContent.classList.remove('hidden');
-      if (selectedButton) {
-          selectedButton.classList.remove('border-transparent', 'text-gray-500', 'hover:text-indigo-700');
-          selectedButton.classList.add('border-indigo-500', 'text-indigo-700');
+      // ===================== COLUNAS =====================
+      const columns = [
+        { key: "entrega", label: "Entrega", type: "number" },
+
+        { key: UNIDADE_KEY, label: "Unidade / Equipamento", type: "text",
+          options: ["SEMAIA", "USF CENTRO", "USF CASA AMARELA", "PS ARROZAL"] },
+
+        { key: "tipo_de_ambiente_planejado", label: "Tipo de Ambiente Planejado", type: "select",
+          options: ["Setup Convencional", "Cabine", "Cabine Acessibilidade"] },
+
+        { key: "qntd", label: "Qntd.", type: "number" },
+
+        // Novas colunas de progresso
+        { key: "treinamento", label: "Treinamento", type: "select",
+          options: ["Em Andamento", "Concluído (Ok)", "Pendente"] },
+
+        { key: "acompanhamento", label: "Acompanhamento", type: "select",
+          options: ["Realizado", "Não Realizado"] },
+
+        { key: "finalizado", label: "Finalizado", type: "select",
+          options: ["Sim", "Não"] },
+
+        { key: "instalacao_do_equipamento", label: "Instalação do Equipamento", type: "select",
+          options: ["Pendente", "Em Andamento", "Concluída"] },
+
+        { key: "condicao_atual", label: "Condição Atual", type: "select",
+          options: ["Pronto", "Pendência", "Parcial"] },
+
+        { key: "infrarede", label: "Infra-rede", type: "select",
+          options: ["A visitar", "Pronto", "Em Execução"] },
+
+        { key: "plotagem", label: "Plotagem", type: "select",
+          options: ["Aguardando", "Realizado", "Pendente"] },
+
+        { key: "climatizacao", label: "Climatização", type: "select",
+          options: ["Disponível", "Indisponível", "Parcial"] },
+
+        { key: "internet", label: "Internet", type: "select",
+          options: ["Disponível", "Indisponível"] },
+
+        { key: "mobiliamesacadeira", label: "Mobilia/Mesa/Cadeira", type: "select",
+          options: ["Completo", "Parcial", "Indisponível"] },
+
+        // Campos adicionais
+        { key: "nobreak", label: "Nobreak", type: "text" },
+        { key: "impressora", label: "Impressora", type: "text" },
+        { key: "profissional_de_saude__disponivel", label: "Profissional de saúde - Disponível", type: "text" },
+        { key: "necessidade_de_apoio_tecnico", label: "Necessidade de Apoio Técnico", type: "text" },
+        { key: "observacoes_de_operacao", label: "Observações de Operação", type: "text" },
+        { key: "linhas_de_cuidado_envolvidas", label: "Linhas de Cuidado Envolvidas", type: "text" },
+        { key: "endereco", label: "Endereço", type: "text" },
+        { key: "bairro", label: "Bairro", type: "text" },
+        { key: "contato", label: "Contato", type: "text" },
+        { key: "cargo", label: "Cargo", type: "text" },
+        { key: "email", label: "Email", type: "text" },
+        { key: "telefone", label: "Telefone", type: "text" },
+
+        // Datas
+        { key: "data_inicio", label: "Data Início", type: "date" },
+        { key: "data_fim", label: "Data Fim", type: "date" }
+      ];
+
+      const tableBody = document.getElementById("table-body");
+      const tableHead = document.getElementById("table-head");
+      const filterControls = document.getElementById("filter-controls");
+
+      // ===================== DATALIST UNIDADE =====================
+      function ensureUnidadeDatalist() {
+        if (document.getElementById("datalist-unidade")) return;
+        const col = columns.find(c => c.key === UNIDADE_KEY);
+        const dl = document.createElement("datalist");
+        dl.id = "datalist-unidade";
+        dl.innerHTML = (col?.options || []).map(opt => `<option value="${opt}"></option>`).join("");
+        document.body.appendChild(dl);
+      }
+      document.addEventListener("DOMContentLoaded", ensureUnidadeDatalist);
+
+      // ===================== LOADING & ABAS =====================
+      function showLoading(){ document.getElementById("loading-overlay").classList.remove("hidden"); }
+      function hideLoading(){ document.getElementById("loading-overlay").classList.add("hidden"); }
+
+      function switchTab(tabName){
+        document.querySelectorAll(".tab-content").forEach(content => content.classList.add("hidden"));
+        document.querySelectorAll('[id^="tab-"]').forEach(button => {
+          button.classList.remove("border-indigo-500", "text-indigo-700");
+          button.classList.add("border-transparent", "text-gray-500", "hover:text-indigo-700");
+        });
+
+        const selectedContent = document.getElementById(`content-${tabName}`);
+        const selectedButton  = document.getElementById(`tab-${tabName}`);
+        if (selectedContent) selectedContent.classList.remove("hidden");
+        if (selectedButton){
+          selectedButton.classList.remove("border-transparent", "text-gray-500", "hover:text-indigo-700");
+          selectedButton.classList.add("border-indigo-500", "text-indigo-700");
+        }
+
+        if (tabName === "dashboard") renderizarDashboard();
+        if (tabName === "calendario") renderizarCalendario();
       }
 
-      if (tabName === 'dashboard') {
-          renderizarDashboard();
+      // ===================== UTILITÁRIAS =====================
+      function formatarData(valor){
+        if(!valor) return "";
+        // aceita "dd/MM/yyyy" e "yyyy-MM-dd"
+        if (valor.includes("/")) {
+          return valor;
+        }
+        try{
+          const base = valor.includes("T") ? valor.split("T")[0] : valor;
+          const [y,m,d] = base.split("-");
+          if (!y || !m || !d) return valor;
+          return `${d}/${m}/${y}`;
+        }catch{
+          return valor;
+        }
       }
-    }
 
-    // ===================== UTILS DATA =====================
-    function formatarData(dataString) {
-      if (!dataString) return '';
-      try {
-          const datePart = dataString.split('T')[0];
-          const [ano, mes, dia] = datePart.split('-');
-          return `${dia}/${mes}/${ano}`;
-      } catch (e) {
-          return dataString;
-      }
-    }
+      // ===================== INPUT RENDER =====================
+      function generateInputHTML(key, value, type, options) {
+        const baseClass = "w-full px-1 py-0.5 border border-gray-300 rounded text-xs";
+        const val = value ?? "";
 
-    function calcularDiferencaDias(dataInicio, dataFim) {
-      if (!dataInicio || !dataFim) return '';
-      try {
-          const start = new Date(dataInicio.split('T')[0]);
-          const end = new Date(dataFim.split('T')[0]);
-          const diffTime = Math.abs(end - start);
-          return Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
-      } catch (e) {
-          console.error("Erro no cálculo de dias:", e);
-          return '';
-      }
-    }
+        if (key === UNIDADE_KEY) {
+          ensureUnidadeDatalist();
+          return `
+            <input
+              type="text"
+              id="input-${key}"
+              name="${key}"
+              list="datalist-unidade"
+              value="${val}"
+              placeholder="Digite ou escolha..."
+              class="${baseClass}">
+          `;
+        }
 
-    // ===================== INPUT RENDER =====================
-    function generateInputHTML(key, value, type, options, currentRow) {
-      const baseClass = "w-full px-1 py-0.5 border border-gray-300 rounded text-xs";
-      if (type === 'select' && options) {
-          const selectedValue = (typeof value === 'string' && value) ? value.trim() : '';
+        if (type === "select" && options) {
+          const selectedValue = (typeof val === "string" && val) ? val.trim() : "";
           const optionsHTML = options.map(opt =>
-              `<option value="${opt}" ${selectedValue === opt ? 'selected' : ''}>${opt}</option>`
-          ).join('');
-          return `<select id="input-${key}" name="${key}" class="${baseClass}">
-                      <option value="">Selecione...</option>
-                      ${optionsHTML}
-                  </select>`;
+            `<option value="${opt}" ${selectedValue === opt ? "selected" : ""}>${opt}</option>`
+          ).join("");
+          return `
+            <select id="input-${key}" name="${key}" class="${baseClass}">
+              <option value="">Selecione...</option>
+              ${optionsHTML}
+            </select>
+          `;
+        }
+
+        const typeAttr = type === "date" ? "date" : (type === "number" ? "number" : "text");
+        let displayValue = val;
+
+        // converter dd/MM/yyyy -> yyyy-MM-dd para o input date
+        if (type === "date" && displayValue && displayValue.includes("/")) {
+          const [d,m,y] = displayValue.split("/");
+          if (y && m && d) displayValue = `${y}-${m}-${d}`;
+        }
+        if (type === "date" && displayValue && displayValue.includes("T")) {
+          displayValue = displayValue.split("T")[0];
+        }
+
+        return `<input type="${typeAttr}" id="input-${key}" name="${key}" value="${displayValue}" class="${baseClass}">`;
       }
 
-      const typeAttr = type === 'date' ? 'date' : (type === 'number' ? 'number' : 'text');
-      let displayValue = value || '';
-      if (type === 'date' && displayValue && displayValue.includes('T')) {
-          displayValue = displayValue.split('T')[0];
+      // ===================== TABELA =====================
+      function renderizarCabecalho(){
+        tableHead.innerHTML = "";
+        const tr = document.createElement("tr");
+
+        tr.innerHTML = `
+          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+        `;
+
+        columns.forEach(col => {
+          const th = document.createElement("th");
+          th.className = "px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider";
+          th.textContent = col.label;
+          tr.appendChild(th);
+        });
+
+        tableHead.appendChild(tr);
       }
-      return `<input type="${typeAttr}" id="input-${key}" name="${key}" value="${displayValue}" class="${baseClass}">`;
-    }
 
-    // ===================== TABELA =====================
-    function renderizarTabela() {
-      tableBody.innerHTML = '';
-      let dadosParaRenderizar = [...linhasOriginais];
+      function montarCelulasAcoes(item, isNew, isEditing){
+        let html = `<td class="px-2 py-3 whitespace-nowrap text-sm text-blue-600">`;
+        if (isNew){
+          html += `
+            <button onclick="salvarNovaLinha()" class="bg-green-500 text-white p-1 rounded hover:bg-green-600 font-medium mr-1 text-xs">Salvar</button>
+            <button onclick="cancelarNovaLinha()" class="text-red-600 hover:text-red-800 font-medium text-xs">Cancelar</button>
+          `;
+        } else if (isEditing){
+          html += `
+            <button onclick="salvarEdicao(${item.index})" class="bg-green-500 text-white p-1 rounded hover:bg-green-600 font-medium mr-1 text-xs">Salvar</button>
+            <button onclick="cancelarEdicao(${item.index})" class="text-red-600 hover:text-red-800 font-medium text-xs">Cancelar</button>
+          `;
+        } else {
+          html += `
+            <button onclick="iniciarEdicao(${item.index})" class="text-blue-600 hover:text-blue-800 font-medium mr-1 text-xs">Editar</button>
+            <button onclick="excluirLinha(${item.index})" class="text-red-600 hover:text-red-800 font-medium text-xs">Excluir</button>
+          `;
+        }
+        html += `</td>`;
+        return html;
+      }
 
-      // Filtros
-      dadosParaRenderizar = dadosParaRenderizar.filter(item => {
-          if (item.index === 0) return true; // sempre mostrar a nova linha
-          let passa = true;
-          const plotagemValue = item.acoes || 'Todos';
+      function renderizarTabela(){
+        tableBody.innerHTML = "";
+        const dados = [...linhasOriginais];
 
-          if (filtrosAtivos.treinamento !== 'Todos' && item.treinamento !== filtrosAtivos.treinamento) passa = false;
-
-          if (filtrosAtivos.responsaveis !== 'Todos') {
-              const responsaveisDaLinha = (item.responsaveis || '').split(',').map(v => v.trim());
-              if (!responsaveisDaLinha.includes(filtrosAtivos.responsaveis)) passa = false;
-          }
-
-          if (filtrosAtivos.finalizada !== 'Todos' && item.finalizada !== filtrosAtivos.finalizada) passa = false;
-          if (filtrosAtivos.acoes !== 'Todos' && plotagemValue !== filtrosAtivos.acoes) passa = false;
-
-          return passa;
-      });
-
-      if (dadosParaRenderizar.length === 0) {
-          tableBody.innerHTML = '<tr><td colspan="12" class="p-4 text-center text-gray-500">Nenhum dado encontrado para os filtros aplicados.</td></tr>';
+        if (!dados.length){
+          tableBody.innerHTML = '<tr><td colspan="12" class="p-4 text-center text-gray-500">Nenhum dado encontrado.</td></tr>';
           return;
-      }
+        }
 
-      dadosParaRenderizar.forEach(item => {
-          const isNewRow = item.index === 0;
-          const isEditing = item.isEditing || isNewRow;
+        dados.forEach(item => {
+          const isNew = item.index === 0;
+          const isEditing = item.isEditing || isNew;
 
-          const tr = document.createElement('tr');
+          const tr = document.createElement("tr");
           tr.className = isEditing ? "bg-yellow-100 hover:bg-yellow-50" : "hover:bg-gray-50";
           tr.dataset.rowIndex = item.index;
 
-          let rowHTML = '';
-          rowHTML += `<td class="px-4 py-3 whitespace-nowrap text-xs text-gray-400">${isNewRow ? 'NOVA' : item.index - 1}</td>`;
+          let rowHTML = "";
 
+          // ID
+          rowHTML += `<td class="px-4 py-3 whitespace-nowrap text-xs text-gray-400">${isNew ? "NOVA" : item.index - 1}</td>`;
+          // Ações
+          rowHTML += montarCelulasAcoes(item, isNew, isEditing);
+
+          // Demais colunas
           columns.forEach(col => {
-              let cellValue = item[col.key] || '';
-              let contentHTML = '';
-
-              if (isEditing) {
-                  if (col.key === 'tempo') {
-                      const dataInicio = item.data_inicio || '';
-                      const dataFim = item.data_fim || '';
-                      const tempoDias = calcularDiferencaDias(dataInicio, dataFim) || cellValue;
-                      contentHTML = `<input type="number" id="input-${col.key}" name="${col.key}" value="${tempoDias}" class="w-full px-1 py-0.5 border border-gray-300 rounded text-xs bg-gray-200" disabled>`;
-                  } else {
-                      contentHTML = generateInputHTML(col.key, cellValue, col.type, col.options, item);
-                  }
-                  rowHTML += `<td class="px-2 py-1 whitespace-nowrap text-sm text-gray-700">${contentHTML}</td>`;
-              } else {
-                  let displayValue = cellValue;
-                  if (col.key === 'data_inicio' || col.key === 'data_fim') {
-                      displayValue = formatarData(cellValue);
-                  } else if (col.key === 'tempo') {
-                      displayValue = calcularDiferencaDias(item.data_inicio, item.data_fim) || cellValue;
-                  }
-                  rowHTML += `<td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700">${displayValue}</td>`;
+            let cellValue = item[col.key] ?? "";
+            if (isEditing) {
+              const inputHTML = generateInputHTML(col.key, cellValue, col.type, col.options);
+              rowHTML += `<td class="px-2 py-1 whitespace-nowrap text-sm text-gray-700">${inputHTML}</td>`;
+            } else {
+              let displayValue = cellValue;
+              if (col.type === "date") {
+                displayValue = formatarData(cellValue);
               }
+              rowHTML += `<td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700">${displayValue}</td>`;
+            }
           });
-
-          rowHTML += `<td class="px-2 py-3 whitespace-nowrap text-sm text-blue-600">`;
-          if (isNewRow) {
-              rowHTML += `<button onclick="salvarNovaLinha()" class="bg-green-500 text-white p-1 rounded hover:bg-green-600 font-medium mr-1 text-xs">Salvar</button>
-                          <button onclick="cancelarNovaLinha()" class="text-red-600 hover:text-red-800 font-medium text-xs">Cancelar</button>`;
-          } else if (isEditing) {
-              rowHTML += `<button onclick="salvarEdicao(${item.index})" class="bg-green-500 text-white p-1 rounded hover:bg-green-600 font-medium mr-1 text-xs">Salvar</button>
-                          <button onclick="cancelarEdicao(${item.index})" class="text-red-600 hover:text-red-800 font-medium text-xs">Cancelar</button>`;
-          } else {
-              rowHTML += `<button onclick="iniciarEdicao(${item.index})" class="text-blue-600 hover:text-blue-800 font-medium mr-1 text-xs">Editar</button>
-                          <button onclick="excluirLinha(${item.index})" class="text-red-600 hover:text-red-800 font-medium text-xs">Excluir</button>`;
-          }
-          rowHTML += `</td>`;
 
           tr.innerHTML = rowHTML;
           tableBody.appendChild(tr);
+        });
+      }
+
+      // duplo clique para editar linha
+      tableBody.addEventListener("dblclick", (event) => {
+        const tr = event.target.closest("tr");
+        if (!tr) return;
+        const index = Number(tr.dataset.rowIndex);
+        if (!index) return; // ignora cabeçalho/linha sem índice
+        iniciarEdicao(index);
       });
-    }
 
-    // ===================== CARREGAMENTO (GET) =====================
-    async function carregarDadosDaPlanilha() {
-      tableBody.innerHTML = '<tr><td colspan="12" class="p-4 text-center text-gray-500">Carregando dados da planilha...</td></tr>';
-      showLoading();
-
-      try {
-          const response = await fetch(API_URL, { method: 'GET', cache: 'no-cache' });
+      // ===================== CARREGAMENTO (GET) =====================
+      async function carregarDadosDaPlanilha(silencioso = false){
+        tableBody.innerHTML = '<tr><td colspan="12" class="p-4 text-center text-gray-500">Carregando dados da planilha...</td></tr>';
+        showLoading();
+        try {
+          const response = await fetch(API_URL, { method: "GET", cache: "no-cache" });
           if (!response.ok) throw new Error(`Erro HTTP: ${response.status}`);
           const data = await response.json();
 
           if (!Array.isArray(data)) {
-            const msg = (data && data.message) ? data.message : 'Resposta inválida da API.';
+            const msg = (data && data.message) ? data.message : "Resposta inválida da API.";
             throw new Error(msg);
           }
 
-          // Remove eventual "nova" linha local antes de repor os dados do servidor
           const possuiNova = linhasOriginais.length > 0 && linhasOriginais[0].index === 0;
-          const linhaNova = possuiNova ? linhasOriginais[0] : null;
+          const linhaNova  = possuiNova ? linhasOriginais[0] : null;
 
-          // IMPORTANTE: Preservar o index vindo do servidor
           const serverData = data.map(item => ({ ...item, index: Number(item.index) }));
 
           linhasOriginais = possuiNova ? [linhaNova, ...serverData] : serverData;
 
-          if (!document.getElementById('content-dashboard').classList.contains('hidden')) {
-              renderizarDashboard();
-          }
+          const colUn = columns.find(c => c.key === UNIDADE_KEY);
+          const existentes = Array.from(new Set(
+            linhasOriginais
+              .filter(l => l.index !== 0)
+              .map(l => l[UNIDADE_KEY])
+              .filter(Boolean)
+          ));
+          if (colUn) colUn.options = Array.from(new Set([...(colUn.options || []), ...existentes]));
+          const dl = document.getElementById("datalist-unidade");
+          if (dl) dl.innerHTML = (colUn?.options || []).map(o => `<option value="${o}"></option>`).join("");
 
           renderizarCabecalho();
           injetarFiltros();
           renderizarTabela();
-
-      } catch (error) {
+          if (!document.getElementById("content-dashboard").classList.contains("hidden")) {
+            renderizarDashboard();
+          }
+        } catch (error) {
           console.error("Erro ao carregar dados:", error);
-          alert("Erro ao carregar dados: " + error.message);
-          tableBody.innerHTML = '<tr><td colspan="12" class="p-4 text-center text-red-500">Erro ao carregar dados. Verifique a API.</td></tr>';
-      } finally {
-          hideLoading();
-      }
-    }
-
-    // ===================== AÇÕES (CRUD) =====================
-    async function limparTudo() {
-      if (!confirm("AVISO: Você tem certeza que deseja APAGAR TODOS os dados da planilha?")) return;
-
-      const senha = prompt("Digite a senha de segurança para confirmar a exclusão TOTAL:");
-      if (senha !== SENHA_DE_SEGURANCA) {
-          alert("Senha incorreta. A exclusão total foi cancelada.");
-          return;
-      }
-
-      showLoading();
-
-      try {
-          const response = await fetch(API_URL, {
-              method: 'POST',
-              headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-              body: JSON.stringify({ action: 'deleteAll' }),
-              cache: 'no-cache'
-          });
-
-          const text = await response.text();
-          const result = JSON.parse(text);
-
-          if (result.status === "success") {
-              alert("TODOS os dados foram excluídos com sucesso! Recarregando...");
-              carregarDadosDaPlanilha();
-          } else {
-              alert("Erro ao limpar os dados: " + result.message);
+          if (!silencioso) {
+            alert("Erro ao carregar dados: " + error.message);
           }
-      } catch (error) {
-          console.error("Erro na requisição DELETE ALL:", error);
-          alert("Ocorreu um erro ao tentar apagar todos os dados.");
-      } finally {
+        } finally {
           hideLoading();
+        }
       }
-    }
 
-    async function salvarNovaLinha() {
-      showLoading();
+      // ===================== AÇÕES (CRUD) =====================
+      async function limparTudo(){
+        if (!confirm("AVISO: Você tem certeza que deseja APAGAR TODOS os dados da planilha?")) return;
+        const senha = prompt("Digite a senha de segurança para confirmar a exclusão TOTAL:");
+        if (senha !== SENHA_DE_SEGURANCA) { alert("Senha incorreta. Cancelado."); return; }
 
-      const row = document.querySelector('[data-row-index="0"]');
-      if (!row) { hideLoading(); return; }
+        showLoading();
+        try {
+          const r = await fetch(API_URL, {
+            method:"POST",
+            headers:{"Content-Type":"text/plain;charset=utf-8"},
+            body: JSON.stringify({ action:"deleteAll" }),
+            cache:"no-cache"
+          });
+          const t = await r.text();
+          const res = JSON.parse(t);
+          if (res.status === "success") {
+            alert("Todos os dados foram excluídos!");
+            carregarDadosDaPlanilha();
+          } else {
+            alert("Erro ao limpar: " + res.message);
+          }
+        } catch (e) {
+          console.error(e);
+          alert("Erro de rede ao tentar apagar.");
+        } finally {
+          hideLoading();
+        }
+      }
 
-      const dadosParaSalvar = {};
-      let isValid = true;
+      async function salvarNovaLinha(){
+        showLoading();
+        const row = document.querySelector('[data-row-index="0"]');
+        if (!row){ hideLoading(); return; }
 
-      columns.forEach(col => {
+        const payload = {};
+        let ok = true;
+
+        columns.forEach(col => {
           const input = row.querySelector(`#input-${col.key}`);
-          if (input) {
-              if (col.key === 'tempo') {
-                  const dataInicio = row.querySelector(`#input-data_inicio`).value;
-                  const dataFim = row.querySelector(`#input-data_fim`).value;
-                  dadosParaSalvar[col.key] = calcularDiferencaDias(dataInicio, dataFim) || 0;
-              } else {
-                  dadosParaSalvar[col.key] = input.value;
-              }
-              if (col.key === 'unidade' && !dadosParaSalvar[col.key].trim()) isValid = false;
+          if (input){
+            payload[col.key] = input.value;
+            if (col.key === UNIDADE_KEY && !payload[col.key].trim()) ok = false;
           }
-      });
+        });
 
-      if (!isValid) {
-          alert("O campo 'Unidade' é obrigatório.");
+        if (!ok){
           hideLoading();
+          alert("O campo 'Unidade / Equipamento' é obrigatório.");
           return;
-      }
+        }
+        payload.action = "create";
 
-      dadosParaSalvar.action = 'create';
-
-      try {
-          const response = await fetch(API_URL, {
-              method: 'POST',
-              headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-              body: JSON.stringify(dadosParaSalvar),
-              cache: 'no-cache'
+        try {
+          const r = await fetch(API_URL, {
+            method:"POST",
+            headers:{"Content-Type":"text/plain;charset=utf-8"},
+            body: JSON.stringify(payload),
+            cache:"no-cache"
           });
 
-          const text = await response.text();
-          const result = JSON.parse(text);
-
-          if (result.status === "success") {
-              alert("Nova linha adicionada com sucesso!");
-              linhasOriginais = linhasOriginais.filter(l => l.index !== 0);
-              carregarDadosDaPlanilha();
-          } else {
-              alert("Erro ao salvar na planilha: " + result.message);
+          const texto = await r.text();
+          let res;
+          try {
+            res = JSON.parse(texto);
+          } catch (err) {
+            console.error("Resposta não é JSON:", texto);
+            alert("Linha adicionada na planilha, mas não consegui ler a resposta do servidor. Clique em 'Sincronizar' para atualizar a tela.");
+            return;
           }
-      } catch (error) {
-          console.error("Erro na requisição POST:", error);
-          alert("Erro de rede ao tentar salvar. Verifique a autorização da API.");
-      } finally {
+
+          if (res.status === "success"){
+            alert("Nova linha adicionada com sucesso!");
+            // Remove a linha temporária (index = 0)
+            linhasOriginais = linhasOriginais.filter(l => l.index !== 0);
+
+            // Tenta recarregar os dados em modo silencioso
+            await carregarDadosDaPlanilha(true);
+          } else {
+            alert("Erro ao salvar: " + res.message);
+          }
+        } catch (e) {
+          console.error(e);
+          alert("Erro de rede ao tentar salvar. Se o problema continuar, teste de novo mais tarde.");
+        } finally {
           hideLoading();
+        }
       }
-    }
 
-    async function salvarEdicao(index) {
-      showLoading();
+      async function salvarEdicao(index){
+        showLoading();
+        const row = document.querySelector(`[data-row-index="${index}"]`);
+        if (!row){ hideLoading(); return; }
 
-      const row = document.querySelector(`[data-row-index="${index}"]`);
-      if (!row) { hideLoading(); return; }
+        const payload = {};
+        let ok = true;
 
-      const dadosParaAtualizar = {};
-      let isValid = true;
-
-      columns.forEach(col => {
+        columns.forEach(col => {
           const input = row.querySelector(`#input-${col.key}`);
-          if (input) {
-              if (col.key === 'tempo') {
-                  const dataInicio = row.querySelector(`#input-data_inicio`).value;
-                  const dataFim = row.querySelector(`#input-data_fim`).value;
-                  dadosParaAtualizar[col.key] = calcularDiferencaDias(dataInicio, dataFim) || 0;
-              } else {
-                  dadosParaAtualizar[col.key] = input.value;
-              }
-              if (col.key === 'unidade' && !dadosParaAtualizar[col.key].trim()) isValid = false;
+          if (input){
+            payload[col.key] = input.value;
+            if (col.key === UNIDADE_KEY && !payload[col.key].trim()) ok = false;
           }
-      });
+        });
 
-      if (!isValid) {
-          alert("O campo 'Unidade' é obrigatório.");
+        if (!ok){
           hideLoading();
+          alert("O campo 'Unidade / Equipamento' é obrigatório.");
           return;
-      }
+        }
+        payload.index = index;
+        payload.action = 'update';
 
-      dadosParaAtualizar.index = index;
-      dadosParaAtualizar.action = 'update';
-
-      try {
-          const response = await fetch(API_URL, {
-              method: 'POST',
-              headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-              body: JSON.stringify(dadosParaAtualizar),
-              cache: 'no-cache'
+        try {
+          const r = await fetch(API_URL, {
+            method:'POST',
+            headers:{'Content-Type':'text/plain;charset=utf-8'},
+            body: JSON.stringify(payload),
+            cache:'no-cache'
           });
 
-          const text = await response.text();
-          const result = JSON.parse(text);
-
-          if (result.status === "success") {
-              const itemIndex = linhasOriginais.findIndex(l => l.index === index);
-              if (itemIndex > -1) {
-                  const updatedItem = { ...linhasOriginais[itemIndex], ...dadosParaAtualizar, isEditing: false };
-                  delete updatedItem.originalData;
-                  linhasOriginais[itemIndex] = updatedItem;
-              }
-              alert("Linha atualizada com sucesso!");
-              renderizarTabela();
-          } else {
-              alert("Erro ao atualizar a linha: " + result.message);
+          const texto = await r.text();
+          let res;
+          try {
+            res = JSON.parse(texto);
+          } catch (err) {
+            console.error("Resposta não é JSON:", texto);
+            alert("Resposta inválida do servidor:\n\n" + texto);
+            return;
           }
-      } catch (error) {
-          console.error("Erro na requisição POST/PUT:", error);
-          alert("Erro de rede ao tentar atualizar. Verifique a API.");
-      } finally {
+
+          if (res.status === "success"){
+            const pos = linhasOriginais.findIndex(l => l.index === index);
+            if (pos > -1){
+              const updated = { ...linhasOriginais[pos], ...payload, isEditing:false };
+              delete updated.originalData;
+              linhasOriginais[pos] = updated;
+            }
+            alert("Linha atualizada com sucesso!");
+            renderizarTabela();
+            renderizarDashboard();
+            renderizarCalendario();
+          } else {
+            alert("Erro ao atualizar: " + res.message);
+          }
+
+        } catch (e) {
+          console.error(e);
+          alert("Erro de rede ao tentar atualizar.");
+        } finally {
           hideLoading();
-      }
-    }
-
-    async function excluirLinha(index) {
-      if (!confirm(`Tem certeza que deseja EXCLUIR a linha ${index - 1}? Esta ação é irreversível.`)) return;
-
-      const senha = prompt(`Digite a senha de segurança para excluir a linha ${index - 1}:`);
-      if (senha !== SENHA_DE_SEGURANCA) {
-          alert("Senha incorreta. A exclusão da linha foi cancelada.");
-          return;
+        }
       }
 
-      showLoading();
+      async function excluirLinha(index){
+        if (!confirm(`Excluir a linha ${index-1}?`)) return;
+        const senha = prompt(`Digite a senha de segurança para excluir a linha ${index-1}:`);
+        if (senha !== SENHA_DE_SEGURANCA) { alert("Senha incorreta. Cancelado."); return; }
 
-      try {
-          const response = await fetch(API_URL, {
-              method: 'POST',
-              headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-              body: JSON.stringify({ action: 'delete', index: index }),
-              cache: 'no-cache'
+        showLoading();
+        try {
+          const r = await fetch(API_URL, {
+            method:"POST",
+            headers:{"Content-Type":"text/plain;charset=utf-8"},
+            body: JSON.stringify({ action:"delete", index }),
+            cache:"no-cache"
           });
-
-          const text = await response.text();
-          const result = JSON.parse(text);
-
-          if (result.status === "success") {
-              alert("Linha excluída com sucesso! Recarregando dados...");
-              carregarDadosDaPlanilha();
+          const t = await r.text();
+          const res = JSON.parse(t);
+          if (res.status === "success"){
+            alert("Linha excluída!");
+            carregarDadosDaPlanilha();
           } else {
-              alert("Erro ao excluir a linha: " + result.message);
+            alert("Erro ao excluir: " + res.message);
           }
-      } catch (error) {
-          console.error("Erro na requisição DELETE:", error);
+        } catch (e) {
+          console.error(e);
           alert("Erro de rede ao tentar excluir.");
-      } finally {
+        } finally {
           hideLoading();
+        }
       }
-    }
 
-    function adicionarLinhaLocalmente() {
-      if (linhasOriginais.some(l => l.index === 0)) {
-          alert("Já existe uma linha nova em edição. Salve ou cancele antes de criar outra.");
+      function adicionarLinhaLocalmente(){
+        if (linhasOriginais.some(l => l.index === 0)) {
+          alert("Já existe uma linha nova em edição.");
           return;
+        }
+
+        const nova = {
+          index: 0,
+          entrega: "",
+          [UNIDADE_KEY]: columns.find(c => c.key === UNIDADE_KEY)?.options?.[0] || "",
+          tipo_de_ambiente_planejado: columns.find(c => c.key === "tipo_de_ambiente_planejado")?.options?.[0] || "",
+          qntd: 1,
+          treinamento: "",
+          acompanhamento: "",
+          finalizado: "",
+          instalacao_do_equipamento: "Pendente",
+          condicao_atual: "Pronto",
+          infrarede: "A visitar",
+          plotagem: "Aguardando",
+          climatizacao: "Indisponível",
+          internet: "Disponível",
+          mobiliamesacadeira: "Parcial",
+          nobreak: "",
+          impressora: "",
+          profissional_de_saude__disponivel: "",
+          necessidade_de_apoio_tecnico: "",
+          observacoes_de_operacao: "",
+          linhas_de_cuidado_envolvidas: "",
+          endereco: "",
+          bairro: "",
+          contato: "",
+          cargo: "",
+          email: "",
+          telefone: "",
+          data_inicio: "",
+          data_fim: "",
+          isEditing: true
+        };
+        linhasOriginais.unshift(nova);
+        renderizarTabela();
       }
 
-      const novaLinha = {
-          index: 0,
-          unidade: columns.find(c => c.key === 'unidade')?.options[0] || 'SEMAIA',
-          tipo_de_unidade: columns.find(c => c.key === 'tipo_de_unidade')?.options[0] || 'UBS',
-          tipo_de_ambiente: columns.find(c => c.key === 'tipo_de_ambiente')?.options[0] || 'Totem',
-          data_inicio: new Date().toISOString().split('T')[0],
-          data_fim: '',
-          tempo: 0,
-          treinamento: 'Pendente',
-          responsaveis: columns.find(c => c.key === 'responsaveis')?.options[0] || 'Maclaud',
-          acompanhamento: 'Não Realizado',
-          finalizada: 'Não',
-          acoes: 'Aguardando',
-          isEditing: true
-      };
+      function cancelarNovaLinha(){
+        linhasOriginais = linhasOriginais.filter(l => l.index !== 0);
+        renderizarTabela();
+      }
 
-      linhasOriginais.unshift(novaLinha);
-      renderizarTabela();
-    }
-
-    function cancelarNovaLinha() {
-      linhasOriginais = linhasOriginais.filter(l => l.index !== 0);
-      renderizarTabela();
-    }
-
-    function iniciarEdicao(index) {
-      linhasOriginais.forEach(item => { item.isEditing = false; });
-      const item = linhasOriginais.find(l => l.index === index);
-      if (item) {
+      function iniciarEdicao(index){
+        linhasOriginais.forEach(item => { item.isEditing = false; });
+        const item = linhasOriginais.find(l => l.index === index);
+        if (item){
           item.isEditing = true;
           item.originalData = { ...item };
+        }
+        renderizarTabela();
       }
-      renderizarTabela();
-    }
 
-    function cancelarEdicao(index) {
-      const itemIndex = linhasOriginais.findIndex(l => l.index === index);
-      if (itemIndex > -1) {
+      function cancelarEdicao(index){
+        const itemIndex = linhasOriginais.findIndex(l => l.index === index);
+        if (itemIndex > -1) {
           if (linhasOriginais[itemIndex].originalData) {
-              linhasOriginais[itemIndex] = linhasOriginais[itemIndex].originalData;
+            linhasOriginais[itemIndex] = linhasOriginais[itemIndex].originalData;
           }
           linhasOriginais[itemIndex].isEditing = false;
           renderizarTabela();
-      }
-    }
-
-    // ===================== DASHBOARD =====================
-    function renderizarDashboard() {
-      if (document.getElementById('content-dashboard').classList.contains('hidden')) return;
-
-      const totalLinhas = linhasOriginais.filter(l => l.index !== 0).length;
-      document.getElementById('dashboard-total').textContent = totalLinhas;
-
-      if (totalLinhas === 0) {
-          document.querySelector('#content-dashboard > .grid').innerHTML =
-              '<p class="text-center text-gray-500 col-span-4">Nenhum dado para exibir no dashboard.</p>';
-          return;
+        }
       }
 
-      const metricas = {
-          treinamento: {
-              key: 'treinamento',
-              labels: ['OK', 'Em Andamento', 'Pendente'],
-              colors: ['#10B981', '#F59E0B', '#EF4444']
-          },
-          acompanhamento: {
-              key: 'acompanhamento',
-              labels: ['Realizado', 'Não Realizado'],
-              colors: ['#EF4444', '#F59E0B']
-          },
-          finalizada: {
-              key: 'finalizada',
-              labels: ['Sim', 'Não'],
-              colors: ['#3B82F6', '#6B7280']
-          },
-          plotagem: {
-              key: 'acoes',
-              labels: ['Realizado', 'Aguardando', 'Pendente'],
-              colors: ['#10B981', '#F59E0B', '#EF4444']
+      // ===================== DASHBOARD =====================
+
+      // Paleta padrão (caso falte alguma cor no config)
+      const DASHBOARD_DEFAULT_COLORS = [
+        "#3b82f6", // azul
+        "#22c55e", // verde
+        "#f59e0b", // amarelo/laranja
+        "#ef4444", // vermelho
+        "#6b7280", // cinza
+        "#a855f7"  // roxo
+      ];
+
+      // Config visual por métrica (para ficar igual ao seu outro dashboard)
+      const DASHBOARD_STATUS_CONFIG = {
+        treinamento: {
+          // valores que contam como "concluídos" para o percentual do centro
+          concludedValues: ["Concluído (Ok)"],
+          // ordem fixa na legenda
+          labelsOrder: ["Em Andamento", "Concluído (Ok)", "Pendente"],
+          // cores específicas por status
+          colors: {
+            "Em Andamento":   "#3b82f6", // azul
+            "Concluído (Ok)": "#22c55e", // verde
+            "Pendente":       "#facc15"  // amarelo
           }
+        },
+        acompanhamento: {
+          concludedValues: ["Realizado"],
+          labelsOrder: ["Realizado", "Não Realizado"],
+          colors: {
+            "Realizado":     "#f59e0b", // laranja
+            "Não Realizado": "#ef4444"  // vermelho
+          }
+        },
+        finalizado: {
+          concludedValues: ["Sim"],
+          // na planilha você grava "Sim"/"Não", mas na legenda mostramos o texto completo
+          labelsOrder: ["Sim", "Não"],
+          colors: {
+            "Sim": "#3b82f6", // azul
+            "Não": "#e5e7eb"  // cinza claro
+          },
+          displayLabels: {
+            "Sim": "Finalizada (Sim)",
+            "Não": "Não Finalizada"
+          }
+        },
+        plotagem: {
+          concludedValues: ["Realizado"],
+          labelsOrder: ["Realizado", "Aguardando", "Pendente"],
+          colors: {
+            "Realizado":  "#22c55e", // verde
+            "Aguardando": "#f59e0b", // laranja
+            "Pendente":   "#6b7280"  // cinza
+          }
+        }
       };
 
-      const linhasSalvas = linhasOriginais.filter(l => l.index !== 0);
+      function isValorConcluido(valorRaw) {
+        const valor = (valorRaw || "").toString().toLowerCase();
+        if (!valor) return false;
 
-      Object.keys(metricas).forEach(metricName => {
-          const metric = metricas[metricName];
+        const exatos = ["ok", "sim", "feito", "true", "realizado", "concluida", "concluído (ok)"];
+        if (exatos.includes(valor)) return true;
 
-          const contagem = linhasSalvas.reduce((acc, item) => {
-              const value = item[metric.key] || 'Não Informado';
-              acc[value] = (acc[value] || 0) + 1;
-              return acc;
-          }, {});
+        const padroesParciais = ["conclu", "finaliz", "realiz"];
+        return padroesParciais.some(p => valor.includes(p));
+      }
 
-          const chartData = metric.labels.map(label => contagem[label] || 0);
-          const chartLabels = metric.labels;
-          const chartColors = metric.colors;
+      function calcularDistribuicao(colKey, registros) {
+        const contagem = {};
+        registros.forEach(linha => {
+          const vRaw = linha[colKey];
+          if (vRaw === undefined || vRaw === null || vRaw === "") return;
+          const valor = vRaw.toString().trim();
+          if (!valor) return;
+          contagem[valor] = (contagem[valor] || 0) + 1;
+        });
+        return contagem;
+      }
 
-          createDoughnutChart(
-              `chart-${metricName}`,
-              `legend-${metricName}`,
-              `${metricName}-total-percent`,
-              chartLabels,
-              chartData,
-              chartColors,
-              totalLinhas
-          );
-      });
-    }
+        function atualizarGraficoStatus({ canvasId, legendId, percentId, colKey }, registros) {
+          const total = registros.length;
+          const canvas = document.getElementById(canvasId);
+          const legendDiv = document.getElementById(legendId);
+          const centerSpan = document.getElementById(percentId); // usamos o mesmo span, agora para mostrar TOTAL
 
-    function createDoughnutChart(canvasId, legendId, totalId, labels, data, colors, total) {
-      const canvas = document.getElementById(canvasId);
-      if (!canvas) return;
+          if (!canvas || !legendDiv || !centerSpan) return;
 
-      if (charts[canvasId]) charts[canvasId].destroy();
+          // Número total no centro (igual ao print antigo)
+          centerSpan.textContent = total || 0;
 
-      const percentages = data.map(value => total > 0 ? ((value / total) * 100).toFixed(2) : '0.00');
-      const totalDone = data.reduce((sum, value) => sum + value, 0);
-      document.getElementById(totalId).textContent = `${totalDone}`;
+          // Distribuição dos valores da coluna
+          const dist = calcularDistribuicao(colKey, registros);
+          const labels = Object.keys(dist);
+          const data = labels.map(label => dist[label]);
 
-      const chartConfig = {
-          type: 'doughnut',
-          data: { labels, datasets: [{ data, backgroundColor: colors, borderColor: '#ffffff', borderWidth: 2 }] },
-          options: {
+          // Limpa gráfico anterior, se existir
+          if (charts[canvasId]) {
+            charts[canvasId].destroy();
+            delete charts[canvasId];
+          }
+
+          if (!labels.length || !data.length) {
+            legendDiv.innerHTML = '<p class="text-xs text-gray-400">Sem dados para exibir.</p>';
+            return;
+          }
+
+          // Define cores do gráfico com base no STATUS_COLORS
+          const coresColuna = STATUS_COLORS[colKey] || {};
+          const backgroundColor = labels.map((label, idx) => {
+            const cfg = coresColuna[label];
+            return cfg?.chart || DEFAULT_CHART_COLORS[idx % DEFAULT_CHART_COLORS.length];
+          });
+
+          const ctx = canvas.getContext("2d");
+          charts[canvasId] = new Chart(ctx, {
+            type: "doughnut",
+            data: {
+              labels,
+              datasets: [{
+                data,
+                backgroundColor,
+                borderWidth: 0
+              }]
+            },
+            options: {
               responsive: true,
-              maintainAspectRatio: true,
-              cutout: '75%',
-              plugins: {
-                  legend: { display: false },
-                  tooltip: {
-                      callbacks: {
-                          label: function(context) {
-                              let label = context.label || '';
-                              if (label) label += ': ';
-                              const value = context.parsed;
-                              const percentage = total > 0 ? ((value / total) * 100).toFixed(2) + '%' : '0.00%';
-                              return `${label}${value} (${percentage})`;
-                          }
-                      }
-                  }
-              }
+              maintainAspectRatio: false,
+              plugins: { legend: { display: false } },
+              cutout: "70%" // fatiado mais "fininho"
+            }
+          });
+
+          // Legenda igual ao seu print: bolinha + texto colorido + % + (qtd)
+          legendDiv.innerHTML = labels.map((label, idx) => {
+            const valor = data[idx];
+            const pct = total ? (valor / total) * 100 : 0;
+            const cfg = coresColuna[label] || {};
+            const dotClass = cfg.dot || "bg-gray-400";
+            const textClass = cfg.text || "text-gray-700";
+            const pctFormatado = pct.toFixed(2).replace(".", ",");
+
+            return `
+              <div class="flex justify-between items-center mb-1">
+                <div class="flex items-center">
+                  <span class="w-3 h-3 rounded-full mr-2 ${dotClass}"></span>
+                  <span class="text-xs font-medium ${textClass}">${label}:</span>
+                </div>
+                <span class="text-xs font-semibold ${textClass}">
+                  ${pctFormatado}% ${valor ? `(${valor})` : ""}
+                </span>
+              </div>
+            `;
+          }).join("");
+        }
+
+
+      function renderizarDashboard(){
+        const dashboard = document.getElementById("content-dashboard");
+        if (!dashboard || dashboard.classList.contains("hidden")) return;
+
+        const registros = linhasOriginais.filter(l => l.index !== 0);
+        const total = registros.length;
+        document.getElementById("dashboard-total").textContent = total || 0;
+
+        if (!total) {
+          ["treinamento-total-percent","acompanhamento-total-percent","finalizada-total-percent","plotagem-total-percent"]
+            .forEach(id => {
+              const span = document.getElementById(id);
+              if (span) span.textContent = "0";
+            });
+          Object.values(charts).forEach(c => c.destroy());
+          charts = {};
+          return;
+        }
+
+        const configs = [
+          {
+            canvasId: "chart-treinamento",
+            legendId: "legend-treinamento",
+            percentId: "treinamento-total-percent",
+            colKey: "treinamento",
+            config: DASHBOARD_STATUS_CONFIG.treinamento
+          },
+          {
+            canvasId: "chart-acompanhamento",
+            legendId: "legend-acompanhamento",
+            percentId: "acompanhamento-total-percent",
+            colKey: "acompanhamento",
+            config: DASHBOARD_STATUS_CONFIG.acompanhamento
+          },
+          {
+            canvasId: "chart-finalizada",
+            legendId: "legend-finalizada",
+            percentId: "finalizada-total-percent",
+            colKey: "finalizado",
+            config: DASHBOARD_STATUS_CONFIG.finalizado
+          },
+          {
+            canvasId: "chart-plotagem",
+            legendId: "legend-plotagem",
+            percentId: "plotagem-total-percent",
+            colKey: "plotagem",
+            config: DASHBOARD_STATUS_CONFIG.plotagem
           }
-      };
+        ];
 
-      charts[canvasId] = new Chart(canvas, chartConfig);
-
-      const legendContainer = document.getElementById(legendId);
-      if (legendContainer) {
-          legendContainer.innerHTML = labels.map((label, index) => {
-              const count = data[index];
-              const percentage = percentages[index];
-              const color = colors[index];
-
-              let emoji = '⬜';
-              if (label.includes('OK') || label.includes('Realizado') || label.includes('Sim')) emoji = '✅';
-              else if (label.includes('Pendente') || label.includes('Não Realizado')) emoji = '🔴';
-              else if (label.includes('Andamento') || label.includes('Aguardando')) emoji = '🟡';
-
-              return `
-                  <div class="flex justify-between items-center py-1">
-                      <span class="flex items-center">
-                          <span class="w-2.5 h-2.5 rounded-full mr-2" style="background-color: ${color};"></span>
-                          ${emoji} ${label}:
-                      </span>
-                      <span class="font-medium text-gray-700">${percentage}% (${count})</span>
-                  </div>
-              `;
-          }).join('');
+        configs.forEach(cfg => atualizarGraficoStatus(cfg, registros));
       }
-    }
 
-    // ===================== CABEÇALHO / FILTROS =====================
-    function renderizarCabecalho() {
-      tableHead.innerHTML = '';
-      const trHead = document.createElement('tr');
-      trHead.innerHTML = '<th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Entrega</th>';
-      columns.forEach(col => {
-          const th = document.createElement('th');
-          th.className = "px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider";
-          th.textContent = col.label;
-          trHead.appendChild(th);
-      });
-      trHead.innerHTML += '<th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>';
-      tableHead.appendChild(trHead);
-    }
+      // ===================== FILTROS =====================
+      function injetarFiltros() {
+        const filterKeys = ["plotagem", "internet", "instalacao_do_equipamento", "condicao_atual", "infrarede"];
+        filterControls.innerHTML = "";
 
-    function injetarFiltros() {
-      const filterKeys = ['treinamento', 'responsaveis', 'finalizada', 'acoes'];
-      filterControls.innerHTML = '';
-
-      filterKeys.forEach(key => {
+        filterKeys.forEach(key => {
           const col = columns.find(c => c.key === key);
           if (!col || !col.options) return;
 
-          const labelText = col.key === 'acoes' ? 'Plotagem' : col.label;
-
-          const div = document.createElement('div');
+          const div = document.createElement("div");
           div.className = "flex flex-col";
           div.innerHTML = `
-              <label for="filter-${key}" class="text-sm font-medium text-gray-700 mb-1">${labelText}:</label>
-              <select id="filter-${key}" onchange="aplicarFiltros()" class="border border-gray-300 p-2 rounded-lg text-sm w-40">
-                  <option value="Todos">Todos</option>
-                  ${col.options.map(opt => `<option value="${opt}" ${filtrosAtivos[key] === opt ? 'selected' : ''}>${opt}</option>`).join('')}
-              </select>
+            <label for="filter-${key}" class="text-sm font-medium text-gray-700 mb-1">${col.label}:</label>
+            <select id="filter-${key}" onchange="aplicarFiltros()" class="border border-gray-300 p-2 rounded-lg text-sm w-44">
+              <option value="Todos">Todos</option>
+              ${col.options.map(opt => `<option value="${opt}">${opt}</option>`).join("")}
+            </select>
           `;
           filterControls.appendChild(div);
-      });
+        });
 
-      const clearButton = document.createElement('button');
-      clearButton.id = 'limpar-filtros';
-      clearButton.className = "bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg self-end";
-      clearButton.textContent = 'Limpar Filtros';
-      clearButton.onclick = limparFiltros;
-      filterControls.appendChild(clearButton);
-    }
-
-    function aplicarFiltros() {
-      const filterKeys = ['treinamento', 'responsaveis', 'finalizada', 'acoes'];
-      filterKeys.forEach(key => {
-          const selectElement = document.getElementById(`filter-${key}`);
-          if (selectElement) filtrosAtivos[key] = selectElement.value;
-      });
-      renderizarTabela();
-    }
-
-    function limparFiltros() {
-      const filterKeys = ['treinamento', 'responsaveis', 'finalizada', 'acoes'];
-      filterKeys.forEach(key => {
-          filtrosAtivos[key] = 'Todos';
-          const selectElement = document.getElementById(`filter-${key}`);
-          if (selectElement) selectElement.value = 'Todos';
-      });
-      renderizarTabela();
-    }
-
-    // ===================== CALENDÁRIO =====================
-    const UNIT_COLORS = {
-        'SEMAIA': { bg: 'bg-indigo-600', hover: 'hover:bg-indigo-700' },
-        'Centro': { bg: 'bg-purple-600', hover: 'hover:bg-purple-700' },
-        'Hesio Cordeiro': { bg: 'bg-teal-600', hover: 'hover:bg-teal-700' },
-        'Arrozal': { bg: 'bg-pink-600', hover: 'hover:bg-pink-700' },
-        'Cacaria': { bg: 'bg-orange-600', hover: 'hover:bg-orange-700' },
-
-        'Unidade Mista Sana': { bg: 'bg-cyan-600', hover: 'hover:bg-cyan-700' },
-        'Clínica do Autista': { bg: 'bg-green-600', hover: 'hover:bg-green-700' },
-        'UBS Novo Cavaleiros': { bg: 'bg-blue-600', hover: 'hover:bg-blue-700' },
-        'Pronto Socorro Imbetiba': { bg: 'bg-red-600', hover: 'hover:bg-red-700' },
-        'UPA Lagomar': { bg: 'bg-yellow-600', hover: 'hover:bg-yellow-700' },
-    };
-
-    let currentCalendarDate = new Date();
-
-    function renderizarCalendario() {
-      const grid = document.getElementById('calendar-grid');
-      const title = document.getElementById('current-month-year');
-      const legendContainer = document.getElementById('calendar-legend');
-      grid.innerHTML = '';
-
-      const year = currentCalendarDate.getFullYear();
-      const month = currentCalendarDate.getMonth();
-
-      const date = new Date(year, month, 1);
-      const firstDayOfMonth = date.getDay();
-      const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-      const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
-      title.textContent = `${monthNames[month]} de ${year}`;
-
-      for (let i = 0; i < firstDayOfMonth; i++) {
-          const emptyCell = document.createElement('div');
-          emptyCell.className = 'p-2 h-28 border-b border-gray-300 bg-gray-50';
-          grid.appendChild(emptyCell);
+        const clearButton = document.createElement("button");
+        clearButton.id = "limpar-filtros";
+        clearButton.className = "bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg self-end";
+        clearButton.textContent = "Limpar Filtros";
+        clearButton.onclick = limparFiltros;
+        filterControls.appendChild(clearButton);
       }
 
-      for (let day = 1; day <= daysInMonth; day++) {
-          const cell = document.createElement('div');
-          cell.className = 'p-1 h-28 border-b border-gray-300 flex flex-col items-end relative overflow-y-auto custom-scrollbar';
-          cell.id = `calendar-day-${year}-${month + 1}-${day}`;
+      function aplicarFiltros() {
+        const filterKeys = ["plotagem", "internet", "instalacao_do_equipamento", "condicao_atual", "infrarede"];
+        const filtros = {};
+        filterKeys.forEach(key => {
+          const el = document.getElementById(`filter-${key}`);
+          if (el && el.value !== "Todos") filtros[key] = el.value;
+        });
 
-          const dayNumber = document.createElement('div');
-          dayNumber.className = 'text-sm font-semibold text-gray-700 absolute top-1 right-2';
-          dayNumber.textContent = day;
-          cell.appendChild(dayNumber);
+        const dados = linhasOriginais.filter(item => {
+          if (item.index === 0) return true;
+          for (const k in filtros) {
+            if ((item[k] || "") !== filtros[k]) return false;
+          }
+          return true;
+        });
 
-          const eventContainer = document.createElement('div');
-          eventContainer.className = 'w-full mt-6 space-y-0.5';
-          cell.appendChild(eventContainer);
+        tableBody.innerHTML = "";
+        if (!dados.length) {
+          tableBody.innerHTML = '<tr><td colspan="12" class="p-4 text-center text-gray-500">Nenhum dado encontrado para os filtros aplicados.</td></tr>';
+          return;
+        }
 
+        dados.forEach(item => {
+          const isNew = item.index === 0;
+          const isEditing = item.isEditing || isNew;
+          const tr = document.createElement("tr");
+          tr.className = isEditing ? "bg-yellow-100 hover:bg-yellow-50" : "hover:bg-gray-50";
+          tr.dataset.rowIndex = item.index;
+
+          let rowHTML = "";
+          rowHTML += `<td class="px-4 py-3 whitespace-nowrap text-xs text-gray-400">${isNew ? "NOVA" : item.index - 1}</td>`;
+          rowHTML += montarCelulasAcoes(item, isNew, isEditing);
+
+          columns.forEach(col => {
+            let cellValue = item[col.key] ?? "";
+            if (isEditing) {
+              rowHTML += `<td class="px-2 py-1 whitespace-nowrap text-sm text-gray-700">${generateInputHTML(col.key, cellValue, col.type, col.options)}</td>`;
+            } else {
+              let displayValue = cellValue;
+              if (col.type === "date") displayValue = formatarData(cellValue);
+              rowHTML += `<td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700">${displayValue}</td>`;
+            }
+          });
+
+          tr.innerHTML = rowHTML;
+          tableBody.appendChild(tr);
+        });
+      }
+
+      function limparFiltros() {
+        filterControls.querySelectorAll("select").forEach(s => s.value = "Todos");
+        renderizarTabela();
+      }
+
+      // ===================== CALENDÁRIO =====================
+      const UNIT_COLORS = {
+        "SEMAIA": { bg: "bg-indigo-600", hover: "hover:bg-indigo-700" },
+        "USF CENTRO": { bg: "bg-purple-600", hover: "hover:bg-purple-700" },
+        "USF CASA AMARELA": { bg: "bg-teal-600", hover: "hover:bg-teal-700" },
+        "PS ARROZAL": { bg: "bg-pink-600", hover: "hover:bg-pink-700" }
+      };
+      let currentCalendarDate = new Date();
+
+      function renderizarCalendario() {
+        const grid = document.getElementById("calendar-grid");
+        const title = document.getElementById("current-month-year");
+        const legendContainer = document.getElementById("calendar-legend");
+        if (!grid || !title || !legendContainer) return;
+
+        grid.innerHTML = "";
+
+        const y = currentCalendarDate.getFullYear();
+        const m = currentCalendarDate.getMonth();
+        const first = new Date(y, m, 1).getDay();
+        const days  = new Date(y, m + 1, 0).getDate();
+
+        const months = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
+        title.textContent = `${months[m]} de ${y}`;
+
+        for (let i=0;i<first;i++){
+          const e=document.createElement("div");
+          e.className="p-2 h-28 border-b border-gray-300 bg-gray-50";
+          grid.appendChild(e);
+        }
+
+        for (let d=1; d<=days; d++){
+          const cell = document.createElement("div");
+          cell.className = "p-1 h-28 border-b border-gray-300 flex flex-col items-end relative overflow-y-auto custom-scrollbar";
+          cell.id = `calendar-day-${y}-${m+1}-${d}`;
+          const n = document.createElement("div");
+          n.className = "text-sm font-semibold text-gray-700 absolute top-1 right-2";
+          n.textContent = d;
+          cell.appendChild(n);
+          const box = document.createElement("div");
+          box.className = "w-full mt-6 space-y-0.5";
+          cell.appendChild(box);
           grid.appendChild(cell);
+        }
+
+        const eventos = [];
+        linhasOriginais.filter(l => l.index !== 0).forEach(linha => {
+          const unidade = linha[UNIDADE_KEY];
+          let di = linha.data_inicio;
+          let df = linha.data_fim;
+          if (!unidade || !di || !df) return;
+
+          // converter "dd/MM/yyyy" para Date
+          function parseData(str){
+            if (str.includes("/")){
+              const [d,m,a] = str.split("/");
+              return new Date(Number(a), Number(m)-1, Number(d));
+            }
+            return new Date(str);
+          }
+
+          const start = parseData(di);
+          const end   = parseData(df);
+          if (isNaN(start) || isNaN(end)) return;
+
+          for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)){
+            if (d.getFullYear()===y && (d.getMonth()+1)===(m+1)){
+              eventos.push({ unidade, day:d.getDate(), month:d.getMonth()+1, year:d.getFullYear() });
+            }
+          }
+        });
+
+        eventos.forEach(ev => {
+          const id = `calendar-day-${ev.year}-${ev.month}-${ev.day}`;
+          const cell = document.getElementById(id);
+          if (cell){
+            const colors = UNIT_COLORS[ev.unidade] || { bg:"bg-gray-500", hover:"hover:bg-gray-600" };
+            const tag = document.createElement("div");
+            tag.className = `w-full text-white text-[10px] p-0.5 rounded ${colors.bg} ${colors.hover} truncate cursor-pointer text-center`;
+            tag.title = ev.unidade;
+            tag.textContent = ev.unidade;
+            const box = cell.querySelector(".w-full.mt-6.space-y-0\\.5") || cell.lastChild;
+            box.appendChild(tag);
+          }
+        });
+
+        renderizarLegenda(legendContainer);
       }
 
-      const eventos = gerarEventosDoMes(year, month + 1);
-      eventos.forEach(evento => {
-          const cellId = `calendar-day-${evento.year}-${evento.month}-${evento.day}`;
-          const cell = document.getElementById(cellId);
-
-          if (cell) {
-              const eventElement = document.createElement('div');
-              const colors = UNIT_COLORS[evento.unidade] || { bg: 'bg-gray-500', hover: 'hover:bg-gray-600' };
-
-              eventElement.className = `w-full text-white text-[10px] p-0.5 rounded ${colors.bg} ${colors.hover} truncate cursor-pointer text-center`;
-              eventElement.title = evento.unidade;
-              eventElement.textContent = evento.unidade;
-
-              cell.querySelector('.mt-6.space-y-0\\.5').appendChild(eventElement);
-          }
-      });
-
-      renderizarLegenda(legendContainer);
-    }
-
-    function gerarEventosDoMes(year, month) {
-      const linhasSalvas = linhasOriginais.filter(l => l.index !== 0);
-      const eventos = [];
-
-      linhasSalvas.forEach(linha => {
-          const { unidade, data_inicio, data_fim } = linha;
-          if (!unidade || !data_inicio || !data_fim) return;
-
-          const start = new Date(data_inicio);
-          const end = new Date(data_fim);
-
-          for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
-              if (d.getFullYear() === year && d.getMonth() + 1 === month) {
-                  eventos.push({
-                      unidade: unidade,
-                      day: d.getDate(),
-                      month: d.getMonth() + 1,
-                      year: d.getFullYear(),
-                  });
-              }
-          }
-      });
-
-      return eventos;
-    }
-
-    function renderizarLegenda(container) {
-      container.innerHTML = '';
-      const uniqueUnits = [...new Set(linhasOriginais.filter(l => l.index !== 0).map(l => l.unidade))].filter(u => u);
-
-      uniqueUnits.forEach(unit => {
-          const colors = UNIT_COLORS[unit] || { bg: 'bg-gray-500' };
-          const legendItem = document.createElement('div');
-          legendItem.className = 'flex items-center';
-          legendItem.innerHTML = `
-              <span class="w-4 h-4 rounded mr-2 ${colors.bg}"></span>
-              <span class="text-gray-700">${unit}</span>
-          `;
+      function renderizarLegenda(container) {
+        container.innerHTML = "";
+        const uniqueUnits = [...new Set(linhasOriginais.filter(l => l.index !== 0).map(l => l[UNIDADE_KEY]).filter(Boolean))];
+        uniqueUnits.forEach(unit => {
+          const colors = UNIT_COLORS[unit] || { bg:"bg-gray-500" };
+          const legendItem = document.createElement("div");
+          legendItem.className = "flex items-center";
+          legendItem.innerHTML = `<span class="w-4 h-4 rounded mr-2 ${colors.bg}"></span><span class="text-gray-700">${unit}</span>`;
           container.appendChild(legendItem);
-      });
-    }
-
-    function changeMonth(delta) {
-      currentCalendarDate.setMonth(currentCalendarDate.getMonth() + delta);
-      renderizarCalendario();
-    }
-
-    // ===================== EVENTOS DE UI =====================
-    document.addEventListener('DOMContentLoaded', carregarDadosDaPlanilha);
-    document.getElementById('addRow').addEventListener('click', adicionarLinhaLocalmente);
-    document.getElementById('clr').addEventListener('click', limparTudo);
-
-    document.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('prev-month').addEventListener('click', () => changeMonth(-1));
-      document.getElementById('next-month').addEventListener('click', () => changeMonth(1));
-    });
-
-    const originalSwitchTab = window.switchTab;
-    window.switchTab = (tabName) => {
-      originalSwitchTab(tabName);
-      if (tabName === 'calendario') {
-          renderizarCalendario();
+        });
       }
-    };
+
+      function changeMonth(delta){
+        currentCalendarDate.setMonth(currentCalendarDate.getMonth() + delta);
+        renderizarCalendario();
+      }
+
+      // ===================== EXPORTAR PDF (Dashboard + Calendário) =====================
+      async function exportarPDF() {
+        showLoading();
+        try {
+          const { jsPDF } = window.jspdf;
+          const pdf = new jsPDF("p", "mm", "a4");
+
+          const abas = [
+            { key: "dashboard",  titulo: "Dashboard de Status" },
+            { key: "calendario", titulo: "Calendário de Entregas" }
+          ];
+
+          const abaVisivelAntes = document.querySelector(".tab-content:not(.hidden)");
+          const abaVisivelAntesKey = abaVisivelAntes
+            ? abaVisivelAntes.id.replace("content-", "")
+            : "tabela";
+
+          for (let i = 0; i < abas.length; i++) {
+            const { key, titulo } = abas[i];
+
+            switchTab(key);
+            await new Promise(resolve => setTimeout(resolve, 500));
+
+            const elemento = document.getElementById(`content-${key}`);
+            if (!elemento) continue;
+
+            const canvas = await html2canvas(elemento, { scale: 2, useCORS: true });
+            const imgData = canvas.toDataURL("image/png");
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pageHeight = pdf.internal.pageSize.getHeight();
+            const imgHeight = canvas.height * pdfWidth / canvas.width;
+            const maxImgHeight = pageHeight - 20;
+            const finalImgHeight = Math.min(imgHeight, maxImgHeight);
+
+            if (i > 0) pdf.addPage();
+
+            pdf.setFontSize(14);
+            pdf.text(titulo, pdfWidth / 2, 10, { align: "center" });
+            pdf.addImage(imgData, "PNG", 0, 15, pdfWidth, finalImgHeight);
+          }
+
+          if (abaVisivelAntesKey) {
+            switchTab(abaVisivelAntesKey);
+          }
+
+          pdf.save("meeds-pirai-dashboard.pdf");
+        } catch (e) {
+          console.error(e);
+          alert("Erro ao gerar PDF: " + e.message);
+        } finally {
+          hideLoading();
+        }
+      }
+
+      // ===================== EVENTOS =====================
+      document.addEventListener("DOMContentLoaded", () => carregarDadosDaPlanilha());
+
+      document.getElementById("addRow").addEventListener("click", adicionarLinhaLocalmente);
+      document.getElementById("clr").addEventListener("click", limparTudo);
+      document.getElementById("reload").addEventListener("click", () => carregarDadosDaPlanilha());
+      document.getElementById("export-pdf").addEventListener("click", exportarPDF);
+
+      document.addEventListener("DOMContentLoaded", () => {
+        document.getElementById("prev-month").addEventListener("click", () => changeMonth(-1));
+        document.getElementById("next-month").addEventListener("click", () => changeMonth(1));
+      });
   </script>
 </body>
 </html>
